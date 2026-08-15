@@ -4,13 +4,13 @@ CPAN Rescue is a small, practical effort to help maintain important Perl distrib
 
 The focus is conservative maintenance: fix real bugs, add regression tests, keep compatibility with current Perl releases, improve CI and metadata, and adopt distributions when appropriate.
 
-## Current work
+## Status board
 
-| Distribution | Status | Upstream work |
-| --- | --- | --- |
-| Dist::CheckConflicts | Waiting for upstream review | https://github.com/doy/dist-checkconflicts/pull/13 |
-| Log::Any::Adapter::Screen | Waiting for upstream review | https://github.com/perlancar/perl-Log-Any-Adapter-Screen/pull/4 |
-| Devel::CallChecker | Adoption requested | PAUSE adoption request sent to modules@perl.org |
+| Distribution | Status | Tracking | Upstream work |
+| --- | --- | --- | --- |
+| Dist::CheckConflicts | Waiting for upstream | [#1](https://github.com/kawamurashingo/cpan-rescue/issues/1) | [doy/dist-checkconflicts#13](https://github.com/doy/dist-checkconflicts/pull/13) |
+| Log::Any::Adapter::Screen | Waiting for upstream | [#2](https://github.com/kawamurashingo/cpan-rescue/issues/2) | [perlancar/perl-Log-Any-Adapter-Screen#4](https://github.com/perlancar/perl-Log-Any-Adapter-Screen/pull/4) |
+| Devel::CallChecker | Adoption requested | [#3](https://github.com/kawamurashingo/cpan-rescue/issues/3) | PAUSE adoption request sent to `modules@perl.org` |
 
 ## Workflow
 
@@ -38,6 +38,17 @@ The focus is conservative maintenance: fix real bugs, add regression tests, keep
 - **Adoption requested** — PAUSE/maintainer adoption process in progress
 - **Adopted** — maintenance permissions obtained
 - **Released** — maintenance work shipped to CPAN
+
+Until custom workflow labels or a GitHub Project are added, the canonical status is the `**Status:**` line at the top of each tracking issue and the table above.
+
+## Labels
+
+Repository-default labels are currently used for work type:
+
+- `bug` — behavioral bug fixes
+- `enhancement` — tests, maintenance improvements, adoption, CI, or metadata work
+
+Status is kept separately from work type so a task can move from Candidate to Released without changing what kind of work it is.
 
 ## Goal
 
