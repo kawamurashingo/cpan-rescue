@@ -12,7 +12,7 @@ CPAN Rescue is still young. Current results:
 
 - **1 upstream PR merged**
 - **1 additional upstream PR awaiting review**
-- **1 distribution adoption request in progress**
+- **2 distribution adoption requests in progress**
 - Regression coverage added without unnecessary production-code changes
 
 Impact numbers will grow as tracked work reaches upstream merge, adoption, and CPAN release.
@@ -22,7 +22,7 @@ Impact numbers will grow as tracked work reaches upstream merge, adoption, and C
 | Distribution | Status | Tracking | Upstream work |
 | --- | --- | --- | --- |
 | Dist::CheckConflicts | Waiting for upstream | [#1](https://github.com/kawamurashingo/cpan-rescue/issues/1) | [doy/dist-checkconflicts#13](https://github.com/doy/dist-checkconflicts/pull/13) |
-| Log::Any::Adapter::Screen | Merged upstream | [#2](https://github.com/kawamurashingo/cpan-rescue/issues/2) | [perlancar/perl-Log-Any-Adapter-Screen#4](https://github.com/perlancar/perl-Log-Any-Adapter-Screen/pull/4) |
+| Log::Any::Adapter::Screen | Adoption requested | [#2](https://github.com/kawamurashingo/cpan-rescue/issues/2) | [perlancar/perl-Log-Any-Adapter-Screen#4](https://github.com/perlancar/perl-Log-Any-Adapter-Screen/pull/4); PAUSE adoption request sent to `modules@perl.org` |
 | Devel::CallChecker | Adoption requested | [#3](https://github.com/kawamurashingo/cpan-rescue/issues/3) | PAUSE adoption request sent to `modules@perl.org` |
 
 ### First upstream success
@@ -31,7 +31,7 @@ The regression-test contribution for **Log::Any::Adapter::Screen** was merged up
 
 The change adds coverage for `log_level`, `min_level`, precedence behavior, the default warning level, and level-detection methods. No production code was changed.
 
-This distribution remains tracked until the merged work is included in a CPAN release.
+An adoption request has now been sent to the PAUSE admins so maintenance can continue through a future CPAN release.
 
 ## What makes a good rescue candidate?
 
