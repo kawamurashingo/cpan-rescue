@@ -9,7 +9,7 @@ The focus is conservative maintenance: fix real bugs, add regression tests, keep
 | Distribution | Status | Tracking | Upstream work |
 | --- | --- | --- | --- |
 | Dist::CheckConflicts | Waiting for upstream | [#1](https://github.com/kawamurashingo/cpan-rescue/issues/1) | [doy/dist-checkconflicts#13](https://github.com/doy/dist-checkconflicts/pull/13) |
-| Log::Any::Adapter::Screen | Waiting for upstream | [#2](https://github.com/kawamurashingo/cpan-rescue/issues/2) | [perlancar/perl-Log-Any-Adapter-Screen#4](https://github.com/perlancar/perl-Log-Any-Adapter-Screen/pull/4) |
+| Log::Any::Adapter::Screen | Merged upstream | [#2](https://github.com/kawamurashingo/cpan-rescue/issues/2) | [perlancar/perl-Log-Any-Adapter-Screen#4](https://github.com/perlancar/perl-Log-Any-Adapter-Screen/pull/4) |
 | Devel::CallChecker | Adoption requested | [#3](https://github.com/kawamurashingo/cpan-rescue/issues/3) | PAUSE adoption request sent to `modules@perl.org` |
 
 ## Workflow
@@ -35,6 +35,7 @@ The focus is conservative maintenance: fix real bugs, add regression tests, keep
 - **Candidate** — worth investigating
 - **In progress** — actively being researched or patched
 - **Waiting for upstream** — PR submitted and awaiting review
+- **Merged upstream** — upstream PR merged; waiting for a CPAN release
 - **Adoption requested** — PAUSE/maintainer adoption process in progress
 - **Adopted** — maintenance permissions obtained
 - **Released** — maintenance work shipped to CPAN
