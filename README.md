@@ -45,6 +45,7 @@ Good candidates typically have several of these characteristics:
 - A focused bug, missing regression coverage, CI problem, or metadata issue
 - A scope small enough to understand and test thoroughly
 - Evidence of continued use, such as active downstream distributions or OS packages
+- A CPAN River position whose downstream impact can be understood and tested responsibly
 
 The aim is quality and downstream value, not the number of distributions adopted.
 
@@ -55,8 +56,11 @@ The aim is quality and downstream value, not the number of distributions adopted
 3. Reproduce the problem and understand existing behavior before changing anything.
 4. Prefer a small first contribution: regression test, focused bug fix, CI repair, or metadata cleanup.
 5. Run the full test suite on a current Perl release and document the environment.
-6. Submit an upstream PR, or request adoption when the distribution is explicitly available for adoption.
-7. Follow the work through merge, CPAN release, and downstream verification where practical.
+6. Assess CPAN River position: identify direct and indirect dependents and plan downstream testing proportional to the potential impact.
+7. Submit an upstream PR, or request adoption when the distribution is explicitly available for adoption.
+8. Before releases, test direct dependents when practical; use developer releases for significant or compatibility-sensitive changes.
+9. After releases, review CPAN Testers results and investigate regressions before proceeding further.
+10. Follow the work through merge, CPAN release, and downstream verification where practical.
 
 ## Maintenance principles
 
@@ -68,6 +72,9 @@ The aim is quality and downstream value, not the number of distributions adopted
 - Document what was tested and on which Perl version.
 - Treat adoption as an ongoing maintenance responsibility, not a badge.
 - Avoid adopting more distributions than can be maintained responsibly.
+- Treat CPAN River position as part of release risk: the more downstream distributions rely on a module, the more conservative the release process should be.
+- For high-impact distributions, test direct dependents against proposed releases and use developer releases for significant changes.
+- Review CPAN Testers results after releases and investigate downstream regressions promptly.
 
 ## Status vocabulary
 
