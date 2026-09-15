@@ -13,9 +13,10 @@ CPAN Rescue is still young. Current results:
 - **1 upstream PR merged**
 - **1 additional upstream PR awaiting review**
 - **2 distributions adopted**
+- **Devel::CallChecker stewardship now covers a low-level XS compatibility module with 13 direct and 81 direct-or-indirect CPAN dependents**
 - Regression coverage added without unnecessary production-code changes
 
-Impact numbers will grow as tracked work reaches upstream merge, adoption, and CPAN release.
+The impact is intentionally measured in maintained downstream reliability rather than adoption count alone. For infrastructure distributions, CPAN River position and compatibility risk are part of the result.
 
 ## Active rescues
 
@@ -40,7 +41,9 @@ On 2026-09-15, CPAN Rescue reached its first two successful adoptions:
 - **Log::Any::Adapter::Screen** — PERLANCAR agreed to transfer the first-come indexing permission to `SHINGO`.
 - **Devel::CallChecker** — PAUSE admin Neil Bowers transferred the first-come indexing permission to `SHINGO` after reviewing a maintenance plan that explicitly accounts for its CPAN River position.
 
-`Devel::CallChecker` has 13 direct dependent distributions and 81 direct or indirect dependents, so its release process will include downstream testing, developer releases for significant changes, and review of CPAN Testers results.
+`Devel::CallChecker` is a low-level compatibility layer around Perl call-checker APIs used by XS code. At adoption time, PAUSE admin Neil Bowers identified 13 direct dependent distributions and 81 distributions relying on it directly or indirectly. This makes the maintenance work infrastructure stewardship rather than feature development: a regression can propagate well beyond users who knowingly install `Devel::CallChecker`.
+
+For that reason, its release process will treat downstream compatibility as a release requirement. Direct dependents will be tested against proposed releases where practical, significant or compatibility-sensitive changes will use developer releases first, and CPAN Testers results will be reviewed for regressions after release. The objective is to keep a mature piece of Perl infrastructure boring, compatible, and available to the software above it.
 
 ## What makes a good rescue candidate?
 
