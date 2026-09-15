@@ -12,7 +12,7 @@ CPAN Rescue is still young. Current results:
 
 - **1 upstream PR merged**
 - **1 additional upstream PR awaiting review**
-- **2 distribution adoption requests in progress**
+- **2 distributions adopted**
 - Regression coverage added without unnecessary production-code changes
 
 Impact numbers will grow as tracked work reaches upstream merge, adoption, and CPAN release.
@@ -22,8 +22,8 @@ Impact numbers will grow as tracked work reaches upstream merge, adoption, and C
 | Distribution | Status | Tracking | Upstream work |
 | --- | --- | --- | --- |
 | Dist::CheckConflicts | Waiting for upstream | [#1](https://github.com/kawamurashingo/cpan-rescue/issues/1) | [doy/dist-checkconflicts#13](https://github.com/doy/dist-checkconflicts/pull/13) |
-| Log::Any::Adapter::Screen | Adoption requested | [#2](https://github.com/kawamurashingo/cpan-rescue/issues/2) | [perlancar/perl-Log-Any-Adapter-Screen#4](https://github.com/perlancar/perl-Log-Any-Adapter-Screen/pull/4); PAUSE adoption request sent to `modules@perl.org` |
-| Devel::CallChecker | Adoption requested | [#3](https://github.com/kawamurashingo/cpan-rescue/issues/3) | PAUSE adoption request sent to `modules@perl.org` |
+| Log::Any::Adapter::Screen | Adopted | [#2](https://github.com/kawamurashingo/cpan-rescue/issues/2) | [perlancar/perl-Log-Any-Adapter-Screen#4](https://github.com/perlancar/perl-Log-Any-Adapter-Screen/pull/4); first-come permission transferred to `SHINGO` |
+| Devel::CallChecker | Adopted | [#3](https://github.com/kawamurashingo/cpan-rescue/issues/3) | first-come permission transferred to `SHINGO` |
 
 ### First upstream success
 
@@ -31,7 +31,16 @@ The regression-test contribution for **Log::Any::Adapter::Screen** was merged up
 
 The change adds coverage for `log_level`, `min_level`, precedence behavior, the default warning level, and level-detection methods. No production code was changed.
 
-An adoption request has now been sent to the PAUSE admins so maintenance can continue through a future CPAN release.
+The distribution has now been adopted, with first-come indexing permission transferred to PAUSE ID `SHINGO`. The next step is to verify the current distribution state and prepare a conservative maintenance release.
+
+### First adoptions
+
+On 2026-09-15, CPAN Rescue reached its first two successful adoptions:
+
+- **Log::Any::Adapter::Screen** — PERLANCAR agreed to transfer the first-come indexing permission to `SHINGO`.
+- **Devel::CallChecker** — PAUSE admin Neil Bowers transferred the first-come indexing permission to `SHINGO` after reviewing a maintenance plan that explicitly accounts for its CPAN River position.
+
+`Devel::CallChecker` has 13 direct dependent distributions and 81 direct or indirect dependents, so its release process will include downstream testing, developer releases for significant changes, and review of CPAN Testers results.
 
 ## What makes a good rescue candidate?
 
