@@ -27,6 +27,7 @@ The impact is intentionally measured in maintained downstream reliability rather
 | Dist::CheckConflicts | Waiting for upstream | [#1](https://github.com/kawamurashingo/cpan-rescue/issues/1) | [doy/dist-checkconflicts#13](https://github.com/doy/dist-checkconflicts/pull/13) |
 | Log::Any::Adapter::Screen | Adopted | [#2](https://github.com/kawamurashingo/cpan-rescue/issues/2) | [perlancar/perl-Log-Any-Adapter-Screen#4](https://github.com/perlancar/perl-Log-Any-Adapter-Screen/pull/4); first-come permission transferred to `SHINGO` |
 | Devel::CallChecker | Released | [#3](https://github.com/kawamurashingo/cpan-rescue/issues/3) | 0.010 released 2026-09-19; first post-adoption maintenance release |
+| DBD::ODBC | Candidate | [#25](https://github.com/kawamurashingo/cpan-rescue/issues/25) | Investigating maintainer status, testability, downstream impact, and a focused first maintenance target |
 
 ### First upstream success
 
