@@ -27,6 +27,8 @@ The impact is intentionally measured in maintained downstream reliability rather
 | Dist::CheckConflicts | Waiting for upstream | [#1](https://github.com/kawamurashingo/cpan-rescue/issues/1) | [doy/dist-checkconflicts#13](https://github.com/doy/dist-checkconflicts/pull/13) |
 | Log::Any::Adapter::Screen | Adopted | [#2](https://github.com/kawamurashingo/cpan-rescue/issues/2) | [perlancar/perl-Log-Any-Adapter-Screen#4](https://github.com/perlancar/perl-Log-Any-Adapter-Screen/pull/4); first-come permission transferred to `SHINGO` |
 | Devel::CallChecker | Released | [#3](https://github.com/kawamurashingo/cpan-rescue/issues/3) | 0.010 released 2026-09-19; first post-adoption maintenance release |
+| DBD::ODBC | Candidate | [#25](https://github.com/kawamurashingo/cpan-rescue/issues/25) | Long-term maintenance stagnation; ownership and modern CI/testability under investigation |
+| Dist::Zilla::Plugin::MetaProvides family | Candidate | [#27](https://github.com/kawamurashingo/cpan-rescue/issues/27) | Confirmed ADOPTME family; plan is core → Package → Class → FromFile, with downstream validation |
 
 ### First upstream success
 
@@ -89,6 +91,17 @@ The aim is quality and downstream value, not the number of distributions adopted
 - Treat CPAN River position as part of release risk: the more downstream distributions rely on a module, the more conservative the release process should be.
 - For high-impact distributions, test direct dependents against proposed releases and use developer releases for significant changes.
 - Review CPAN Testers results after releases and investigate downstream regressions promptly.
+
+## Rescue dashboard
+
+The Active rescues table above is the canonical project dashboard. Each tracking issue should keep a `**Status:**` line near the top and record ownership/adoption state, upstream links, testing evidence, downstream impact, release details, and the next concrete action.
+
+For related distributions that share ownership and dependency structure, one tracking issue may manage the family until individual release work needs separate issues.
+
+Current high-impact investigation priorities:
+
+- **Dist::Zilla::Plugin::MetaProvides family (#27)** — explicit `ADOPTME` ownership and live downstream usage; adoption and conservative maintenance are actionable now.
+- **DBD::ODBC (#25)** — potentially high impact, but still classified as a candidate because formal abandonment/adoption eligibility is not yet established.
 
 ## Status vocabulary
 
