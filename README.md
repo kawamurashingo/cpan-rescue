@@ -13,7 +13,9 @@ CPAN Rescue is still young. Current results:
 - **1 upstream PR merged**
 - **1 additional upstream PR awaiting review**
 - **2 distributions adopted**
-- **Devel::CallChecker stewardship now covers a low-level XS compatibility module with 13 direct and 81 direct-or-indirect CPAN dependents**
+- **1 post-adoption maintenance release published to CPAN**
+- **Devel::CallChecker 0.010 released under `SHINGO` after own-suite, metadata, signature, and downstream validation**
+- **Devel::CallChecker stewardship covers a low-level XS compatibility module with a historical adoption snapshot of 13 direct and 81 direct-or-indirect CPAN dependents**
 - Regression coverage added without unnecessary production-code changes
 
 The impact is intentionally measured in maintained downstream reliability rather than adoption count alone. For infrastructure distributions, CPAN River position and compatibility risk are part of the result.
@@ -24,7 +26,7 @@ The impact is intentionally measured in maintained downstream reliability rather
 | --- | --- | --- | --- |
 | Dist::CheckConflicts | Waiting for upstream | [#1](https://github.com/kawamurashingo/cpan-rescue/issues/1) | [doy/dist-checkconflicts#13](https://github.com/doy/dist-checkconflicts/pull/13) |
 | Log::Any::Adapter::Screen | Adopted | [#2](https://github.com/kawamurashingo/cpan-rescue/issues/2) | [perlancar/perl-Log-Any-Adapter-Screen#4](https://github.com/perlancar/perl-Log-Any-Adapter-Screen/pull/4); first-come permission transferred to `SHINGO` |
-| Devel::CallChecker | Adopted | [#3](https://github.com/kawamurashingo/cpan-rescue/issues/3) | first-come permission transferred to `SHINGO` |
+| Devel::CallChecker | Released | [#3](https://github.com/kawamurashingo/cpan-rescue/issues/3) | 0.010 released 2026-09-19; first post-adoption maintenance release |
 
 ### First upstream success
 
@@ -43,7 +45,7 @@ On 2026-09-15, CPAN Rescue reached its first two successful adoptions:
 
 `Devel::CallChecker` is a low-level compatibility layer around Perl call-checker APIs used by XS code. At adoption time, PAUSE admin Neil Bowers identified 13 direct dependent distributions and 81 distributions relying on it directly or indirectly. This makes the maintenance work infrastructure stewardship rather than feature development: a regression can propagate well beyond users who knowingly install `Devel::CallChecker`.
 
-For that reason, its release process will treat downstream compatibility as a release requirement. Direct dependents will be tested against proposed releases where practical, significant or compatibility-sensitive changes will use developer releases first, and CPAN Testers results will be reviewed for regressions after release. The objective is to keep a mature piece of Perl infrastructure boring, compatible, and available to the software above it.
+For that reason, its release process treats downstream compatibility as a release requirement. Before 0.010, direct dependents were exercised against the release candidate across representative Perl versions, with zero candidate regressions relative to the reviewed 0.009 baselines. Devel::CallChecker 0.010 was released on 2026-09-19 and successfully indexed by PAUSE. CPAN Testers results will be reviewed for regressions before further production changes. The objective is to keep a mature piece of Perl infrastructure boring, compatible, and available to the software above it.
 
 ## What makes a good rescue candidate?
 
@@ -98,7 +100,7 @@ The aim is quality and downstream value, not the number of distributions adopted
 - **Adopted** — maintenance permissions obtained
 - **Released** — maintenance work shipped to CPAN
 
-The canonical status is the `**Status:**` line at the top of each tracking issue and the table above.
+The canonical status is the `**Status:**` line at the top of each tracking issue and the table above. For completed rescues, the tracking issue also records release/indexing details and post-release follow-up.
 
 ## Measuring impact
 
