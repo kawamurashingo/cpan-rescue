@@ -141,7 +141,7 @@ The existing conservative maintenance workflow remains the technical foundation:
 2. Confirm the current CPAN release, source repository, reverse dependencies, and maintainer status.
 3. Reproduce the problem and understand existing behavior before changing anything.
 4. Prefer a small first contribution: regression test, focused bug fix, CI repair, or metadata cleanup.
-5. Run the full test suite and document the environment.
+5. Run the full test suite on a current Perl release and document the Perl version and test environment.
 6. Assess CPAN River position and plan downstream testing proportional to potential impact.
 7. Submit an upstream PR, or request adoption when the distribution is explicitly available for adoption and someone is ready for stewardship.
 8. Before releases, test direct dependents when practical; use developer releases for significant or compatibility-sensitive changes.
