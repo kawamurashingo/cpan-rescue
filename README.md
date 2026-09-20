@@ -96,9 +96,9 @@ These results now serve a second purpose: the rescue workflow is becoming a prac
 
 | Distribution | Status | Tracking | Upstream work |
 | --- | --- | --- | --- |
-| Dist::CheckConflicts | Waiting for upstream | [#1](https://github.com/kawamurashingo/cpan-rescue/issues/1) | [doy/dist-checkconflicts#13](https://github.com/doy/dist-checkconflicts/pull/13) |
-| Log::Any::Adapter::Screen | Adopted | [#2](https://github.com/kawamurashingo/cpan-rescue/issues/2) | [perlancar/perl-Log-Any-Adapter-Screen#4](https://github.com/perlancar/perl-Log-Any-Adapter-Screen/pull/4); first-come permission transferred to `SHINGO` |
-| Devel::CallChecker | Released | [#3](https://github.com/kawamurashingo/cpan-rescue/issues/3) | 0.010 released 2026-09-19; first post-adoption maintenance release |
+| Dist::CheckConflicts | Waiting for upstream | [#1](https://github.com/kawamurashingo/cpan-rescue/issues/1) | [doy/dist-checkconflicts#13](https://github.com/doy/dist-checkconflicts/pull/13) remains open, awaiting upstream review |
+| Log::Any::Adapter::Screen | Adopted | [#2](https://github.com/kawamurashingo/cpan-rescue/issues/2) | Regression-test [PR #4](https://github.com/perlancar/perl-Log-Any-Adapter-Screen/pull/4) merged; [upstream issue #5](https://github.com/perlancar/perl-Log-Any-Adapter-Screen/issues/5) is awaiting repository-maintenance guidance |
+| Devel::CallChecker | Released | [#3](https://github.com/kawamurashingo/cpan-rescue/issues/3) | [kawamurashingo/Devel-CallChecker](https://github.com/kawamurashingo/Devel-CallChecker); 0.010 released 2026-09-19 |
 | DBD::ODBC | Candidate | [#25](https://github.com/kawamurashingo/cpan-rescue/issues/25) | Long-term maintenance stagnation; ownership and modern CI/testability under investigation |
 | Dist::Zilla::Plugin::MetaProvides family | Candidate | [#27](https://github.com/kawamurashingo/cpan-rescue/issues/27) | Confirmed ADOPTME family; plan is core → Package → Class → FromFile, with downstream validation |
 
