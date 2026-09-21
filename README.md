@@ -94,13 +94,19 @@ These results now serve a second purpose: the rescue workflow is becoming a prac
 
 ## Active rescues
 
-| Distribution | Status | Tracking | Upstream work |
-| --- | --- | --- | --- |
-| Dist::CheckConflicts | Waiting for upstream | [#1](https://github.com/kawamurashingo/cpan-rescue/issues/1) | [doy/dist-checkconflicts#13](https://github.com/doy/dist-checkconflicts/pull/13) remains open, awaiting upstream review |
-| Log::Any::Adapter::Screen | Adopted | [#2](https://github.com/kawamurashingo/cpan-rescue/issues/2) | Regression-test [PR #4](https://github.com/perlancar/perl-Log-Any-Adapter-Screen/pull/4) merged; [upstream issue #5](https://github.com/perlancar/perl-Log-Any-Adapter-Screen/issues/5) is awaiting repository-maintenance guidance |
-| Devel::CallChecker | Released | [#3](https://github.com/kawamurashingo/cpan-rescue/issues/3) | [kawamurashingo/Devel-CallChecker](https://github.com/kawamurashingo/Devel-CallChecker); 0.010 released 2026-09-19 |
-| DBD::ODBC | Adoption requested / patch ready | [#25](https://github.com/kawamurashingo/cpan-rescue/issues/25) | MetaCPAN explicitly marks it up for adoption; `SHINGO` sent the adoption request. Modern Linux CI is restored and [DBD-ODBC PR #1](https://github.com/kawamurashingo/DBD-ODBC/pull/1) fixes the DBI 1.647+ DBIXS feature-gate regression with green coverage across Perl 5.38/5.40 and DBI 1.646/1.647/1.648/1.653. Next trigger: adoption/PAUSE response; then review permissions, upstream the focused patch, and prepare the smallest defensible release. |
-| Dist::Zilla::Plugin::MetaProvides family | Candidate | [#27](https://github.com/kawamurashingo/cpan-rescue/issues/27) | Confirmed ADOPTME family; plan is core → Package → Class → FromFile, with downstream validation |
+This table is the working task board. **Start with “Next action”**: it should say exactly what can be done next. “Waiting for” means there is no useful action until that event happens.
+
+| Distribution | State | Next action | Waiting for | Tracking |
+| --- | --- | --- | --- | --- |
+| Dist::CheckConflicts | Upstream PR open | Review/respond to upstream feedback when it arrives | Upstream review of [PR #13](https://github.com/doy/dist-checkconflicts/pull/13) | [#1](https://github.com/kawamurashingo/cpan-rescue/issues/1) |
+| Log::Any::Adapter::Screen | Adopted | Follow repository-maintenance guidance, then decide the next maintenance change | Response/guidance on [upstream issue #5](https://github.com/perlancar/perl-Log-Any-Adapter-Screen/issues/5) | [#2](https://github.com/kawamurashingo/cpan-rescue/issues/2) |
+| Devel::CallChecker | Released 0.010 | Monitor post-release results; investigate only if a regression appears | — | [#3](https://github.com/kawamurashingo/cpan-rescue/issues/3) |
+| DBD::ODBC | Adoption requested; patch ready | When adoption/PAUSE responds: confirm permissions, upstream the focused [DBIXS fix](https://github.com/kawamurashingo/DBD-ODBC/pull/1), then prepare the smallest defensible release | Adoption/PAUSE response | [#25](https://github.com/kawamurashingo/cpan-rescue/issues/25) |
+| Dist::Zilla::Plugin::MetaProvides family | Candidate | Start with the core distribution; reproduce its baseline and define downstream validation before moving to Package → Class → FromFile | — | [#27](https://github.com/kawamurashingo/cpan-rescue/issues/27) |
+
+### How to use this board
+
+When resuming CPAN Rescue work, pick a row with a concrete **Next action** and no unresolved **Waiting for** dependency. The tracking issue holds investigation details and evidence; this README should stay short and answer only: **where are we, what do we do next, and what are we waiting on?**
 
 ## First completed stewardship example
 
