@@ -214,6 +214,7 @@ These should describe experience and responsibility, not create a contributor le
 4. Continue existing rescue work conservatively while using it to validate the incubation model.
 5. Turn the proven maintenance-release workflow into reusable contributor documentation.
 6. [#40 — Explore sustainable maintenance and funding for DBD::ODBC](https://github.com/kawamurashingo/cpan-rescue/issues/40): use DBD::ODBC as a concrete case for exploring how high-impact CPAN infrastructure can fund maintenance capacity without making sponsorship a source of technical control.
+7. [#41 — Build a high-impact CPAN rescue and sustainability portfolio](https://github.com/kawamurashingo/cpan-rescue/issues/41): keep a sourced shortlist of high-impact rescue, co-maintenance, funding, and migration candidates, and promote them into dedicated rescue issues only when there is a bounded first task.
 
 ## Sustainable maintenance
 
