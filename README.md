@@ -64,9 +64,18 @@ Good first maintenance tasks may include:
 - testing a release tarball in a clean environment;
 - running and classifying downstream tests.
 
-The first set of contributor-friendly tasks is being developed in [#29](https://github.com/kawamurashingo/cpan-rescue/issues/29).
+The first contributor-friendly tasks are now ready. **If you want to try real CPAN maintenance, start with one of these:**
 
-These are real maintenance tasks, not simulated exercises. Each should have a concrete outcome, a validation method, clear prerequisites, and a reviewer or mentoring path.
+- [#37 — Verify Log::Any::Adapter::Screen on modern Perl](https://github.com/kawamurashingo/cpan-rescue/issues/37) — beginner, about 30–60 minutes; no PR required.
+- [#33 — Reconstruct the Log::Any::Adapter::Screen 0.141 release baseline](https://github.com/kawamurashingo/cpan-rescue/issues/33) — Explorer, about 1–3 hours.
+- [#34 — Establish a conservative Perl CI matrix](https://github.com/kawamurashingo/cpan-rescue/issues/34) — Contributor, about 1–3 hours for someone comfortable with GitHub Actions.
+- [#39 — Inspect one CPAN Rescue candidate for modern testability](https://github.com/kawamurashingo/cpan-rescue/issues/39) — Explorer, about 1–2 hours.
+
+To take a task, comment on the issue that you would like to work on it. No PAUSE account, adoption commitment, or promise to become a maintainer is required. Questions are expected, and maintainer review/mentoring is part of the task.
+
+The task-design work is tracked in [#29](https://github.com/kawamurashingo/cpan-rescue/issues/29), and the first end-to-end external-contributor experiment is tracked in [#36](https://github.com/kawamurashingo/cpan-rescue/issues/36).
+
+These are real maintenance tasks, not simulated exercises. Each has a concrete outcome, a validation method, clear responsibility boundaries, and a reviewer or mentoring path.
 
 ## Responsibility and handoff
 
