@@ -64,9 +64,18 @@ CPAN Rescue は、こうしたスキルを、レビュー付き・責任範囲�
 - クリーンな環境でリリース tarball をテストする
 - 下流テストを実行して分類する
 
-コントリビュータ向けの最初のタスク群は [#29](https://github.com/kawamurashingo/cpan-rescue/issues/29) で整備中です。
+最初のコントリビュータ向けタスクは、すでに参加できる状態です。**実際の CPAN メンテナンスを試してみたい場合は、ここから始めてください。**
 
-これらは模擬演習ではなく、本物のメンテナンス作業です。それぞれに、具体的な成果物、検証方法、明確な前提条件、レビューまたはメンタリングへの導線があることを目指します。
+- [#37 — Log::Any::Adapter::Screen を現行 Perl で検証する](https://github.com/kawamurashingo/cpan-rescue/issues/37) — 初心者向け、約30〜60分。PR は不要です。
+- [#33 — Log::Any::Adapter::Screen 0.141 のリリース基準を再構築する](https://github.com/kawamurashingo/cpan-rescue/issues/33) — Explorer、約1〜3時間。
+- [#34 — 保守的な Perl CI matrix を構築する](https://github.com/kawamurashingo/cpan-rescue/issues/34) — Contributor、GitHub Actions に慣れている人で約1〜3時間。
+- [#39 — CPAN Rescue 候補を1つ選び、現行 Perl でテスト可能か調査する](https://github.com/kawamurashingo/cpan-rescue/issues/39) — Explorer、約1〜2時間。
+
+参加したいタスクの Issue に「やってみたい」とコメントしてください。PAUSE アカウントも、adoption の約束も、将来メンテナになるという約束も必要ありません。質問することも作業の一部であり、メンテナによるレビューとメンタリングを含みます。
+
+タスク設計は [#29](https://github.com/kawamurashingo/cpan-rescue/issues/29)、最初の外部コントリビュータによる一連の育成実験は [#36](https://github.com/kawamurashingo/cpan-rescue/issues/36) で追跡しています。
+
+これらは模擬演習ではなく、本物のメンテナンス作業です。それぞれに具体的な成果物、検証方法、明確な責任範囲、レビューまたはメンタリングへの導線があります。
 
 ## 責任と引き継ぎ
 
