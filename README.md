@@ -1,5 +1,7 @@
 # CPAN Rescue
 
+**English** | [日本語](README.ja.md)
+
 **CPAN Rescue grows maintainers by maintaining real software.**
 
 Many useful CPAN distributions need maintenance. At the same time, becoming an open-source maintainer has a surprisingly high barrier to entry.
