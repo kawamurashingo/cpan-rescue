@@ -101,7 +101,7 @@ This table is the working task board. **Start with “Next action”**: it shoul
 | Dist::CheckConflicts | Upstream PR open | Review/respond to upstream feedback when it arrives | Upstream review of [PR #13](https://github.com/doy/dist-checkconflicts/pull/13) | [#1](https://github.com/kawamurashingo/cpan-rescue/issues/1) |
 | Log::Any::Adapter::Screen | Adopted | Follow repository-maintenance guidance, then decide the next maintenance change | Response/guidance on [upstream issue #5](https://github.com/perlancar/perl-Log-Any-Adapter-Screen/issues/5) | [#2](https://github.com/kawamurashingo/cpan-rescue/issues/2) |
 | Devel::CallChecker | Released 0.010 | Monitor post-release results; investigate only if a regression appears | — | [#3](https://github.com/kawamurashingo/cpan-rescue/issues/3) |
-| DBD::ODBC | Adoption requested; patch ready | When adoption/PAUSE responds: confirm permissions, upstream the focused [DBIXS fix](https://github.com/kawamurashingo/DBD-ODBC/pull/1), then prepare the smallest defensible release | Adoption/PAUSE response | [#25](https://github.com/kawamurashingo/cpan-rescue/issues/25) |
+| DBD::ODBC | Adoption requested; patch ready; sustainability discussion open | When adoption/PAUSE responds: confirm permissions and upstream the focused [DBIXS fix](https://github.com/kawamurashingo/DBD-ODBC/pull/1). In parallel, discuss long-term maintenance capacity and funding in [#40](https://github.com/kawamurashingo/cpan-rescue/issues/40) | Adoption/PAUSE response for release work | [#25](https://github.com/kawamurashingo/cpan-rescue/issues/25), [#40](https://github.com/kawamurashingo/cpan-rescue/issues/40) |
 | Dist::Zilla::Plugin::MetaProvides family | Candidate | Start with the core distribution; reproduce its baseline and define downstream validation before moving to Package → Class → FromFile | — | [#27](https://github.com/kawamurashingo/cpan-rescue/issues/27) |
 
 ### How to use this board
@@ -213,6 +213,17 @@ These should describe experience and responsibility, not create a contributor le
 3. [#30 — Document mentoring, responsibility, and maintainer handoff policy](https://github.com/kawamurashingo/cpan-rescue/issues/30)
 4. Continue existing rescue work conservatively while using it to validate the incubation model.
 5. Turn the proven maintenance-release workflow into reusable contributor documentation.
+6. [#40 — Explore sustainable maintenance and funding for DBD::ODBC](https://github.com/kawamurashingo/cpan-rescue/issues/40): use DBD::ODBC as a concrete case for exploring how high-impact CPAN infrastructure can fund maintenance capacity without making sponsorship a source of technical control.
+
+## Sustainable maintenance
+
+Growing maintainers also means making maintenance sustainable after someone takes responsibility.
+
+For infrastructure distributions with significant downstream or production use, volunteer effort alone may not always provide enough continuity, compatibility testing, review capacity, or emergency maintenance. CPAN Rescue can therefore also explore grants, recurring sponsorship, fiscal hosting, and other ways to fund shared maintenance capacity while preserving maintainer-led technical governance.
+
+DBD::ODBC is the first concrete case being explored. [Issue #40](https://github.com/kawamurashingo/cpan-rescue/issues/40) tracks the discussion, beginning with maintainer consent, current maintenance needs, production-user evidence, CI/compatibility requirements, and whether a small funding pilot would be useful.
+
+The aim is not to turn every rescue into a funded project. It is to learn when funding is appropriate and how it can reduce single-person dependency without creating sponsor control or adding unreasonable obligations to maintainers.
 
 ## Goal
 
