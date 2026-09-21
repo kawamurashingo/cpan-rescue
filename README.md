@@ -4,6 +4,9 @@
 
 **CPAN Rescue grows maintainers by maintaining real software.**
 
+> **New here?** [Make your first CPAN Rescue contribution →](FIRST_CONTRIBUTOR.md)  
+> No PAUSE account or CPAN release experience required. The smallest first task takes about 30–60 minutes.
+
 Many useful CPAN distributions need maintenance. At the same time, becoming an open-source maintainer has a surprisingly high barrier to entry.
 
 CPAN Rescue connects these two problems.
