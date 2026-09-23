@@ -1,168 +1,203 @@
-# CPAN Rescue の長期ビジョン
+# CPANを越えて：Open Source Rescue のビジョン
 
-CPAN Rescue は、古い Perl モジュールをいくつか救うためだけの活動ではない。
+CPAN Rescue は CPAN から始まる。しかし、そこで扱っている問題は Perl 固有のものではない。
 
-長期的には、オープンソースを「作る」だけでなく、社会が依存しているソフトウェアを継続的に見つけ、理解し、保守し、次の世代へ引き継ぐための **OSS の保守インフラ** になり得る。
+成熟した package ecosystem には、今も多くの software から依存されている一方で、以前ほど十分な保守を受けられなくなった software が少しずつ蓄積していく。これは CPAN だけでなく、PyPI、npm、RubyGems、crates.io、Maven などでも起こり得る。
 
-## OSS の保守インフラ
+だから長期的な構想は、Perl module を救うことより大きい。
 
-オープンソースの世界では、新しいソフトウェアを作る仕組みは充実している。一方で、長年使われ続けているソフトウェアを誰が保守し、誰が引き継ぐのかについては、個々の maintainer の善意や時間に依存する部分が大きい。
+> **ecosystem を越えて、OSS が長く生きられるための保守インフラを作る。**
 
-しかし、広く依存されているソフトウェアの保守は、本来もっと継続的な活動であってよい。
+CPAN は、その方法を実際の maintenance を通して開発し、試す最初の場所である。思想の終着点ではない。
 
-CPAN Rescue が目指せるのは、単に abandoned distribution を adoption することではなく、
+## 問題は CPAN 固有ではない
 
-- 保守が弱くなっているソフトウェアを見つける
-- 現在も使われているかを確認する
+OSS には、新しい software を作り、公開し、配布するための優れた仕組みがある。一方で、別の問いに対するインフラはまだ弱い。
+
+**最初の活発な開発期間が終わった後、重要な software をどう維持するのか。**
+
+古い package は abandoned とは限らない。成熟しているだけかもしれない。maintainer の使える時間が減っただけかもしれない。そして長い間まったく問題なく動いていても、language runtime、compiler、OS、dependency、security expectation などの変化によって、ある日 maintenance が必要になることがある。
+
+その間も downstream の software は何年も依存し続ける。
+
+これは CPAN 固有の lifecycle ではない。長く続く OSS ecosystem 全体の問題である。
+
+必要なのは、繰り返し使える方法だ。
+
+- 保守が弱くなっている software を見つける
+- 現在も使われているか確認する
 - downstream impact を理解する
-- 現在の環境で問題を再現する
-- 小さく安全な修正と regression test を作る
-- upstream と協力する
+- 「古いが安定している software」と「本当に対応が必要な software」を区別する
+- 現在の環境で実際の問題を再現する
+- regression test を伴う小さく保守的な修正を行う
+- existing upstream maintainer と協力する
 - 必要なら stewardship を引き継ぐ
-- release 後も downstream を確認する
-- 次の maintainer に責任を渡せる状態を作る
+- release 後に downstream を確認する
+- 将来また責任を handoff できる状態を作る
 
-という一連の流れそのものを、再利用可能な保守の仕組みにすることだ。
+個々の package を誰が所有するかより、このプロセスを再利用可能にすることの方が重要である。
 
-これは CPAN だけに閉じた考え方ではない。PyPI、npm、RubyGems、crates.io、Maven など、長く使われる package ecosystem には同じ問題がある。
+## CPAN Rescue は実験場
 
-CPAN Rescue は、そのための小さな実験場になれる。
+CPAN Rescue は、この考え方の最初の実装である。
+
+CPAN には実際の ecosystem、dependency、長く使われている distribution、maintainer、downstream user がいる。だから「責任ある Rescue には何が必要なのか」を現実の maintenance を通して学べる。
+
+そこで得た方法を、将来ほかの ecosystem に翻訳できる形にしていきたい。
+
+```text
+             Open Source Rescue
+                    |
+       +------------+------------+
+       |            |            |
+      CPAN         PyPI         npm       ...
+       |            |            |
+       +------------+------------+
+                    |
+             共通する保守の考え方
+                    |
+       discovery / evidence / review
+       stewardship / handoff / verification
+```
+
+tool や用語は ecosystem ごとに違う。しかし根底にある maintenance の問題には共通する部分がある。
 
 ## AI が候補を見つけ、人間が責任を持って保守する
 
-将来、すべての distribution を人間が目視で調査する必要はない。
+ecosystem 全体を人間だけで常時確認することは難しい。
 
-AI や自動化された scanner は、
+そこで AI や automated scanner が **maintenance radar** として働ける。
 
-- reverse dependencies
-- CPAN River 上の位置
-- 最終 release からの期間
-- maintainer / ownership の状態
-- CPAN Testers の failure
-- 現行 Perl での testability
-- downstream distribution や OS package での継続利用
+ecosystem に応じて、
+
+- reverse dependencies / dependency graph
+- ecosystem 内での impact
+- 最後の meaningful maintenance からの期間
+- maintainer / ownership status
+- CI や ecosystem test の failure
+- current runtime との compatibility
+- downstream での継続利用
+- OS package での利用
 - repository activity
+- regression / breakage report
 
-などの公開情報から、保守上の注意が必要な候補を継続的に探すことができる。
+などを観測する。
 
-ただし、AI の役割は「勝手に直して release すること」ではない。
+使える signal は ecosystem ごとに違う。しかし原則は同じである。
 
 > **AI が候補を見つけ、人間が責任を持って保守する。**
 
-AI はレーダーとして働く。
+AI は「調べる価値がある場所」と、その根拠を示す。
 
-「この distribution は重要かもしれない」「ここに regression の兆候がある」「この downstream impact を確認した方がよい」と、人間が調査すべき場所を示す。
+AI が無条件に自律的な maintainer になることを目指すわけではない。
 
-そして人間が、
+existing behavior を理解し、compatibility を判断し、upstream と対話し、patch を review し、stewardship を引き受けるべきか判断し、release に責任を持つのは人間である。
 
-- evidence を確認する
-- existing behavior を理解する
-- compatibility を判断する
-- upstream maintainer と話す
-- patch を review する
-- release の責任を持つ
+自動化は責任をなくすためのものではない。
 
-という役割を担う。
-
-自動化の目的は、人間から責任を取り除くことではない。
-
-**人間が責任を持つべき場所を、より早く、より正確に見つけられるようにすること**である。
+**人間が責任を持つべき場所を見つけるためのもの**である。
 
 ## Rescue Radar
 
-この考え方の一つの具体形が Rescue Radar である。
+将来的な Rescue Radar は、複数の ecosystem を観測できるかもしれない。
 
 ```text
-package ecosystems
-       |
-       v
- automated observation / AI
-       |
-       v
- possible maintenance risk
-       |
-       v
- evidence gathering
-       |
-       v
- human review
-       |
-       v
- small, conservative maintenance
-       |
-       v
- upstream / stewardship / release
-       |
-       v
- downstream verification
+ CPAN     PyPI     npm     RubyGems     crates.io     ...
+   \       |       /          |            /
+            v
+      ecosystem observations
+            |
+            v
+        Rescue Radar
+            |
+      evidence gathering
+            |
+            v
+         human review
+            |
+            v
+  small, conservative maintenance
+            |
+            v
+  upstream / stewardship / release
+            |
+            v
+  downstream verification
 ```
 
 Radar は単純な「古い package ランキング」ではない。
 
-古いこと自体は問題ではない。安定していて変更を必要としないソフトウェアもある。
+古い software が壊れているとは限らない。何年も変更されていないのは、単に十分安定しているからかもしれない。
 
-重要なのは、**impact、maintenance risk、actual breakage、continued use の evidence を組み合わせて見ること**である。
+重要なのは、
 
-そして候補を検出した理由を説明可能にしておく。
+**impact + maintenance risk + actual breakage + continued use**
 
-人間が「なぜこれを見る必要があるのか」を理解できない自動判定は、保守インフラとしては弱い。
+という evidence を組み合わせることである。
+
+そして、なぜその候補が検出されたのかを説明できなければならない。
+
+Rescue Radar は人間の判断を置き換えるものではなく、人間の判断を助けるものだからだ。
 
 ## 成功した Rescue は目立たない
 
-この活動の成功は、adoption 数や commit 数だけでは測れない。
+この活動の成功は、adoption、commit、pull request、release の数だけでは測れない。
 
-理想的な未来では、ある developer が何年後かに古いシステムを更新し、依存している package を install する。
+何年後か、ある developer が古い system を更新するとする。その dependency tree の奥には、元の maintainer がずっと前に活動を離れた package がある。
 
-そして普通に動く。
+developer は dependency を install する。
 
-その developer は、その package が何年か前に maintenance risk に陥っていたことを知らないかもしれない。
+普通に動く。
 
-誰かが regression test を追加したことも、downstream test をしたことも、ownership を引き継いだことも知らないかもしれない。
+かつて誰かが regression に気づき、test を書き、upstream に連絡し、compatibility を修復し、downstream を確認し、別の maintainer へ stewardship を渡したことを、その developer は知らない。
 
 それでよい。
 
 > **誰も「Rescue された」と気づかないくらい、OSS が普通に長生きする。**
 
-それが保守インフラとしての成功である。
+正常に動いているインフラは、普段あまり意識されない。
 
-橋や水道と同じように、正常に動いているときのインフラは意識されにくい。
+OSS maintenance も、そういうインフラになれる。
 
-OSS の保守も、いつかそういう存在になれるかもしれない。
+## CPAN から何を学べるか
 
-## CPAN Rescue が試せること
+CPAN Rescue は小さく始めながら、もっと広い問いを試すことができる。
 
-CPAN Rescue は小さいからこそ、この未来を実験できる。
+1. 本当に maintenance が必要な software をどう発見するか
+2. abandonment と mature stability をどう区別するか
+3. downstream impact をどう測るか
+4. conservative maintenance とは何か
+5. 新しい maintainer が安全に経験を積むにはどうするか
+6. stewardship と handoff はどうあるべきか
+7. 人間の責任を置き換えず、AI をどこに使えるか
+8. どの signal や practice が ecosystem を越えて再利用できるか
 
-まず CPAN で、
+答えを Perl 固有のものにする必要はない。
 
-1. 本当に保守が必要な software を見つける方法を学ぶ
-2. conservative maintenance の手順を磨く
-3. downstream impact の測り方を学ぶ
-4. 新しい maintainer が安全に経験を積める道を作る
-5. stewardship と handoff を普通のものにする
-6. AI / automation を「判断者」ではなく「レーダー」として使う
-7. その方法を他の ecosystem でも再利用できる形にする
-
-ということを積み重ねる。
-
-CPAN Rescue の対象は CPAN だが、ここで学べることは CPAN より大きい。
+CPAN Rescue の成果は CPAN distribution が健全になることだけではなく、他の community が自分たちの ecosystem に適用できる **portable maintenance model** を作ることでもあり得る。
 
 ## Long-term direction
 
-最終的に目指したいのは、より多くの package を所有することではない。
+目標は、より多くの package を所有することではない。
 
-より多くの software が、
+巨大な一つの Rescue 組織を作ることでもない。
 
-- 誰か一人の善意だけに依存せず
-- 問題が深刻になる前に発見され
-- downstream impact を理解した上で安全に修正され
-- 新しい maintainer が参加でき
-- 必要なら責任を次の人へ渡せる
+Rescue を **repeatable, distributed, transferable** なものにして、それぞれの community が共通する考え方や tool を使いながら、自分たちの ecosystem を保守できる状態を目指す。
 
-状態になることである。
+software が、一人の maintainer の活動期間を越えて生きられること。
+
+maintenance risk が emergency になる前に発見できること。
+
+新しい maintainer が stewardship に参加できること。
+
+責任を次の人へ渡せること。
+
+AI が maintenance の必要な場所を見つけ、人間が判断と責任を担うこと。
 
 つまり、
 
-> **software を救うプロジェクトから、software が長生きできる仕組みへ。**
+> **一つの ecosystem の package を救う活動から、OSS 全体で使える保守文化とインフラへ。**
 
-CPAN Rescue は、その仕組みを小さく作り、実際の maintenance を通して学ぶ場所でありたい。
+CPAN Rescue は CPAN から始まる。
+
+しかし、このビジョンは CPAN では終わらない。
