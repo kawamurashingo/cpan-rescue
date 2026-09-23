@@ -23,7 +23,7 @@ CPAN Rescue uses real maintenance work as a path into stewardship.
 
 A contributor does not need to adopt a distribution or make a long-term commitment in order to participate. Responsibility grows only when the contributor wants it and has enough context to take it on safely.
 
-The proposed maintainer path is tracked in [#28](https://github.com/kawamurashingo/cpan-rescue/issues/28):
+The maintainer path and responsibility policy are documented in [MAINTAINER_PATH.md](MAINTAINER_PATH.md) and tracked in [#28](https://github.com/kawamurashingo/cpan-rescue/issues/28):
 
 1. **Explorer** — investigate a candidate, reproduce a problem, or document the current state.
 2. **Contributor** — add a regression test, focused bug fix, CI repair, or metadata improvement.
@@ -86,7 +86,7 @@ Becoming a maintainer should not mean accepting an indefinite obligation.
 
 CPAN Rescue treats maintenance as stewardship rather than permanent ownership. Contributors should be able to increase responsibility gradually, and maintainers should be able to hand responsibility to someone else cleanly.
 
-Mentoring, responsibility boundaries, and handoff policy are being defined in [#30](https://github.com/kawamurashingo/cpan-rescue/issues/30).
+The concrete mentoring, responsibility-boundary, review, and handoff policy is documented in [MAINTAINER_PATH.md](MAINTAINER_PATH.md) and tracked in [#30](https://github.com/kawamurashingo/cpan-rescue/issues/30).
 
 For high-impact distributions, especially XS modules or distributions high in the CPAN River, mentoring and review should become more conservative as potential downstream impact increases.
 

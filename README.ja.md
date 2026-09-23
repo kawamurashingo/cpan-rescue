@@ -23,7 +23,7 @@ CPAN Rescue では、実際のメンテナンス作業を、保守責任を担�
 
 参加するために、ディストリビューションを採用したり、長期的な責任を引き受けたりする必要はありません。責任は、本人が望み、安全に引き受けられるだけの十分な文脈を得たときにのみ段階的に増えていきます。
 
-提案中のメンテナへの道筋は [#28](https://github.com/kawamurashingo/cpan-rescue/issues/28) で追跡しています。
+メンテナへの道筋と責任方針は [MAINTAINER_PATH.md](MAINTAINER_PATH.md) に文書化し、[#28](https://github.com/kawamurashingo/cpan-rescue/issues/28) で追跡しています。
 
 1. **Explorer（探索者）** — 候補を調査し、問題を再現したり、現在の状態を記録したりする。
 2. **Contributor（コントリビュータ）** — 回帰テスト、限定的なバグ修正、CI 修復、メタデータ改善などを行う。
