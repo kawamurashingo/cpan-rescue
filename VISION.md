@@ -1,158 +1,199 @@
-# Long-term Vision for CPAN Rescue
+# Beyond CPAN: A Vision for Open Source Rescue
 
-CPAN Rescue is not only an effort to rescue a handful of old Perl modules.
+CPAN Rescue begins with CPAN, but the problem it addresses is not specific to Perl.
 
-In the long term, it can become part of the **maintenance infrastructure for open source software**: a way to continuously discover, understand, maintain, and hand forward the software that society already depends on.
+Every mature package ecosystem eventually accumulates software that is still depended upon but no longer receives the maintenance attention it once did. This happens in CPAN, PyPI, npm, RubyGems, crates.io, Maven, and elsewhere.
 
-## Maintenance infrastructure for open source
+The long-term idea is therefore larger than rescuing Perl modules:
 
-The open source world has excellent machinery for creating new software. But the question of who maintains software that has been used for years—and who takes responsibility when its original maintainer can no longer do so—still depends heavily on individual maintainers' time and goodwill.
+> **Build maintenance infrastructure that helps open source software live longer, across ecosystems.**
 
-Software that is widely depended upon deserves a more continuous model of maintenance.
+CPAN is where we can develop and test the practice. It is not where the idea has to end.
 
-The goal of CPAN Rescue does not have to be simply adopting abandoned distributions. It can make the maintenance process itself reusable:
+## The problem is ecosystem-wide
 
-- find software whose maintenance is weakening
-- verify that it is still in use
-- understand its downstream impact
-- reproduce problems in current environments
-- create small, safe fixes with regression tests
-- work with upstream maintainers
+Open source has excellent machinery for creating and distributing new software. It has much less infrastructure for answering another question:
+
+**What happens to important software after its original burst of development is over?**
+
+A package may be mature rather than abandoned. Its maintainer may simply have less time. It may work perfectly until a language runtime, compiler, operating system, dependency, or security expectation changes.
+
+Meanwhile, other software can continue depending on it for years.
+
+This is not a CPAN-specific lifecycle. It is a property of long-lived open source ecosystems.
+
+What we need is a repeatable way to:
+
+- discover software whose maintenance is weakening
+- verify that it is still used
+- understand downstream impact
+- distinguish stable old software from software that actually needs attention
+- reproduce real problems in current environments
+- create small, conservative fixes with regression tests
+- work with existing upstream maintainers
 - take on stewardship when necessary
-- verify downstream behavior after a release
-- leave the project in a state where responsibility can be handed to the next maintainer
+- verify downstream behavior after releases
+- make future handoff possible
 
-This idea is not limited to CPAN. Long-lived package ecosystems such as PyPI, npm, RubyGems, crates.io, and Maven face versions of the same problem.
+The reusable process is more important than ownership of any particular package.
 
-CPAN Rescue can be a small laboratory for learning how to solve it.
+## CPAN Rescue as a laboratory
+
+CPAN Rescue is the first implementation of this idea.
+
+CPAN gives us a real ecosystem, real dependency relationships, real aging distributions, real maintainers, and real downstream users. That makes it a useful place to learn what responsible rescue actually requires.
+
+The aim is to discover practices that can eventually be translated into other ecosystems.
+
+For example:
+
+```text
+             Open Source Rescue
+                    |
+       +------------+------------+
+       |            |            |
+      CPAN         PyPI         npm       ...
+       |            |            |
+       +------------+------------+
+                    |
+          shared maintenance ideas
+                    |
+       discovery / evidence / review
+       stewardship / handoff / verification
+```
+
+The tools and terminology will differ between ecosystems. The underlying maintenance problem often will not.
 
 ## AI finds candidates; humans take responsibility
 
-In the future, humans should not need to inspect every distribution manually.
+At ecosystem scale, humans cannot inspect every package continuously.
 
-AI and automated scanners can continuously look for signs that a package may need maintenance attention, using public signals such as:
+AI and automated scanners can act as **maintenance radar**, using signals appropriate to each ecosystem:
 
-- reverse dependencies
-- position in the CPAN River
-- time since the last release
-- maintainer and ownership status
-- CPAN Testers failures
-- testability on current Perl versions
-- continued use in downstream distributions and OS packages
+- reverse dependencies and dependency graphs
+- package ecosystem impact
+- time since meaningful maintenance activity
+- maintainer or ownership status
+- CI and ecosystem test failures
+- compatibility with current runtimes
+- continued downstream usage
+- operating-system packaging
 - repository activity
+- known regressions or breakage reports
 
-But the role of AI is not to silently fix packages and publish releases on its own.
+The exact signals are ecosystem-specific. The principle is not.
 
 > **AI finds candidates; humans take responsibility for maintenance.**
 
-AI should act as radar.
+AI should identify places worth investigating and explain the evidence behind them.
 
-It can point out that a distribution may be important, that there are signs of a regression, or that downstream impact deserves investigation.
+It should not become an unquestioned autonomous maintainer.
 
-Humans then:
+Humans remain responsible for understanding behavior, judging compatibility, communicating with upstream, reviewing patches, deciding whether stewardship is appropriate, and taking responsibility for releases.
 
-- verify the evidence
-- understand existing behavior
-- make compatibility decisions
-- communicate with upstream maintainers
-- review patches
-- take responsibility for releases
+Automation does not remove responsibility.
 
-The purpose of automation is not to remove human responsibility.
-
-It is to **help humans find, earlier and more accurately, the places where responsible maintenance is needed**.
+It helps humans find where responsible maintenance is needed.
 
 ## Rescue Radar
 
-One concrete expression of this idea is a Rescue Radar.
+A general Rescue Radar could observe multiple ecosystems:
 
 ```text
-package ecosystems
-       |
-       v
- automated observation / AI
-       |
-       v
- possible maintenance risk
-       |
-       v
- evidence gathering
-       |
-       v
- human review
-       |
-       v
+ CPAN     PyPI     npm     RubyGems     crates.io     ...
+   \       |       /          |            /
+            v
+     ecosystem observations
+            |
+            v
+       Rescue Radar
+            |
+     evidence gathering
+            |
+            v
+        human review
+            |
+            v
  small, conservative maintenance
-       |
-       v
+            |
+            v
  upstream / stewardship / release
-       |
-       v
+            |
+            v
  downstream verification
 ```
 
-The Radar should not be a simple ranking of "old packages."
+A Radar should not simply rank packages by age.
 
-Age alone is not a problem. Stable software may require no changes for many years.
+Old software is not necessarily broken software. Mature software can remain unchanged for years precisely because it works.
 
-What matters is combining evidence about **impact, maintenance risk, actual breakage, and continued use**.
+Useful detection combines evidence about:
 
-The system should also explain why it detected a candidate.
+**impact + maintenance risk + actual breakage + continued use**
 
-An automated decision that humans cannot understand is a weak foundation for maintenance infrastructure.
+And every candidate should come with an explanation of *why* it was surfaced.
+
+Explainability matters because Rescue Radar is meant to support human judgment, not replace it.
 
 ## A successful rescue is almost invisible
 
-The success of this work should not be measured only by the number of adoptions or commits.
+The success of this work should not be measured only by adoptions, commits, pull requests, or releases.
 
-Imagine a developer, years from now, upgrading an old system and installing one of its dependencies.
+Imagine a developer years from now upgrading a system. Somewhere deep in its dependency tree is a package whose original maintainer moved on long ago.
 
-It simply works.
+The developer installs the dependencies.
 
-That developer may never know that the package had once been at maintenance risk.
+Everything works.
 
-They may never know that someone added a regression test, checked downstream users, took over stewardship, or made a careful release.
+They never need to know that somebody noticed a regression years earlier, wrote a test, contacted upstream, repaired compatibility, verified downstream users, or handed stewardship to another maintainer.
 
-That is fine.
+That is success.
 
 > **Open source should live long enough that nobody needs to notice it was rescued.**
 
-That is what success looks like for maintenance infrastructure.
+Healthy infrastructure is often invisible when it works.
 
-Like bridges or water systems, infrastructure is often least visible when it is working well.
+Open source maintenance can become that kind of infrastructure.
 
-Open source maintenance could become that kind of infrastructure too.
+## What we can learn from CPAN
 
-## What CPAN Rescue can explore
+CPAN Rescue can start small while asking questions that apply much more broadly:
 
-Because CPAN Rescue is small, it is a good place to experiment with this future.
+1. How do we identify software that genuinely needs maintenance?
+2. How do we distinguish abandonment from mature stability?
+3. How do we measure downstream impact?
+4. What does conservative maintenance look like?
+5. How can new maintainers safely gain experience?
+6. How should stewardship and handoff work?
+7. Where can AI help without replacing human responsibility?
+8. Which signals and practices transfer between package ecosystems?
 
-Within CPAN, we can learn how to:
+The answers do not have to remain Perl-specific.
 
-1. identify software that genuinely needs maintenance
-2. develop practices for conservative maintenance
-3. measure and understand downstream impact
-4. give new maintainers a safe path to gain experience
-5. make stewardship and handoff normal parts of an open source project's life
-6. use AI and automation as radar rather than as the final decision-maker
-7. make these practices reusable in other ecosystems
-
-CPAN Rescue works on CPAN, but what we learn here can be larger than CPAN.
+A useful outcome of CPAN Rescue would be not only healthier CPAN distributions, but a **portable maintenance model** that other communities can adapt to their own ecosystems.
 
 ## Long-term direction
 
-The goal is not to own more packages.
+The goal is not to accumulate ownership of packages.
 
-The goal is for more software to reach a state where:
+The goal is not even to build one enormous rescue organization.
 
-- it does not depend indefinitely on the goodwill of a single person
-- maintenance risks can be discovered before they become serious
-- fixes are made conservatively with downstream impact understood
-- new maintainers can participate
-- responsibility can be handed forward when necessary
+The goal is to make rescue **repeatable, distributed, and transferable** so that communities can maintain their own ecosystems using shared ideas and tools.
+
+Software should be able to outlive the availability of any one maintainer.
+
+Maintenance risks should be discoverable before they become emergencies.
+
+New maintainers should have paths into stewardship.
+
+Responsibility should be transferable.
+
+AI should help us see the maintenance work that needs attention, while humans remain accountable for the decisions.
 
 In other words:
 
-> **From a project that rescues software to infrastructure that helps software live longer.**
+> **From rescuing packages in one ecosystem to building a maintenance culture and infrastructure that can work across open source.**
 
-CPAN Rescue can be a place to build that infrastructure on a small scale, and learn from real maintenance work as we go.
+CPAN Rescue starts with CPAN.
+
+The vision does not stop there.
