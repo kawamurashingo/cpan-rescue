@@ -24,5 +24,12 @@ jobs:
           uname -a
       - name: Install cpanminus
         run: cpanm --notest App::cpanminus
+      - name: Install known prerequisite with upstream test-suite incompatibility
+        run: |
+          # Hash::Merge::Simple 0.052 fails t/00-load.t on modern Perl because
+          # its -T shebang is not propagated by the test harness. Its other
+          # tests pass in this runner; install it without tests so we can
+          # expose the MetaProvides test result itself.
+          cpanm --notest Hash::Merge::Simple
       - name: Test exact CPAN release
         run: cpanm --verbose --test-only 'Dist::Zilla::Plugin::MetaProvides@2.002004'
