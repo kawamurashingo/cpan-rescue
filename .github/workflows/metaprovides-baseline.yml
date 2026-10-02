@@ -95,3 +95,35 @@ jobs:
         run: cpanm --notest Hash::Merge::Simple
       - name: Establish downstream baseline
         run: cpanm --verbose --test-only "${{ matrix.dist }}"
+
+
+  downstream-candidate:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        perl: ['5.40', '5.42']
+        dist:
+          - Dist::Zilla::PluginBundle::Author::ETHER
+          - Dist::Zilla::PluginBundle::DROLSKY
+          - Dist::Zilla::PluginBundle::Starter
+    steps:
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: ${{ matrix.perl }}
+      - name: Install known prerequisite with upstream test-suite incompatibility
+        run: cpanm --notest Hash::Merge::Simple
+      - name: Install historical MetaProvides candidate
+        run: |
+          git clone https://github.com/kentnl/Dist-Zilla-Plugin-MetaProvides.git core-candidate
+          git -C core-candidate checkout cc8c2433f6e178c29eec5a0ced60fc35686108c8
+          cpanm --notest --installdeps core-candidate
+          (cd core-candidate && perl Makefile.PL && make install)
+      - name: Install historical Package candidate
+        run: |
+          git clone https://github.com/kentnl/Dist-Zilla-Plugin-MetaProvides-Package.git package-candidate
+          git -C package-candidate checkout 8fa754725c001fd584c2269cd5c5c22a8064a5a0
+          cpanm --notest --installdeps package-candidate
+          (cd package-candidate && perl Makefile.PL && make install)
+      - name: Test downstream against candidate
+        run: cpanm --verbose --test-only "${{ matrix.dist }}"
