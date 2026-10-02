@@ -71,3 +71,27 @@ jobs:
         run: |
           perl Makefile.PL
           make test
+
+
+  downstream-baseline:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        perl: ['5.40', '5.42']
+        dist:
+          - Dist::Zilla::PluginBundle::Author::GETTY
+          - Dist::Zilla::PluginBundle::RSRCHBOY
+          - Dist::Zilla::PluginBundle::Author::ETHER
+          - Dist::Zilla::PluginBundle::DROLSKY
+          - Dist::Zilla::PluginBundle::Starter
+    steps:
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: ${{ matrix.perl }}
+      - name: Record environment
+        run: perl -V
+      - name: Install known prerequisite with upstream test-suite incompatibility
+        run: cpanm --notest Hash::Merge::Simple
+      - name: Establish downstream baseline
+        run: cpanm --verbose --test-only "${{ matrix.dist }}"
