@@ -1,9 +1,9 @@
 name: MetaProvides baseline
 
 on:
-  push:
-    branches:
-      - ci/metaprovides-baseline
+  pull_request:
+    paths:
+      - '.github/workflows/metaprovides-baseline.yml'
   workflow_dispatch:
 
 jobs:
