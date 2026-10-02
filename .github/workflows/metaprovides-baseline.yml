@@ -50,3 +50,24 @@ jobs:
         run: |
           perl Makefile.PL
           make test
+
+
+      - name: Test exact Package CPAN release
+        run: cpanm --verbose --test-only 'Dist::Zilla::Plugin::MetaProvides::Package@2.004003'
+
+      - name: Checkout Package historical master
+        uses: actions/checkout@v4
+        with:
+          repository: kentnl/Dist-Zilla-Plugin-MetaProvides-Package
+          ref: 8fa754725c001fd584c2269cd5c5c22a8064a5a0
+          path: package-master
+
+      - name: Install Package historical master prerequisites
+        working-directory: package-master
+        run: cpanm --notest --installdeps .
+
+      - name: Test Package historical master through generated Makefile.PL
+        working-directory: package-master
+        run: |
+          perl Makefile.PL
+          make test
