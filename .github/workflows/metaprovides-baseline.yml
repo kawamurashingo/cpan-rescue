@@ -1,0 +1,28 @@
+name: MetaProvides baseline
+
+on:
+  push:
+    branches:
+      - ci/metaprovides-baseline
+  workflow_dispatch:
+
+jobs:
+  cpan-release-baseline:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        perl: ['5.40', '5.42']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: ${{ matrix.perl }}
+      - name: Record environment
+        run: |
+          perl -V
+          uname -a
+      - name: Install cpanminus
+        run: cpanm --notest App::cpanminus
+      - name: Test exact CPAN release
+        run: cpanm --verbose --test-only 'Dist::Zilla::Plugin::MetaProvides@2.002004'
