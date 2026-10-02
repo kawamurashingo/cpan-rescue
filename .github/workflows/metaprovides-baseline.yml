@@ -33,3 +33,20 @@ jobs:
           cpanm --notest Hash::Merge::Simple
       - name: Test exact CPAN release
         run: cpanm --verbose --test-only 'Dist::Zilla::Plugin::MetaProvides@2.002004'
+
+      - name: Checkout historical upstream master
+        uses: actions/checkout@v4
+        with:
+          repository: kentnl/Dist-Zilla-Plugin-MetaProvides
+          ref: cc8c2433f6e178c29eec5a0ced60fc35686108c8
+          path: upstream-master
+
+      - name: Install historical master prerequisites
+        working-directory: upstream-master
+        run: cpanm --notest --installdeps .
+
+      - name: Test historical master through generated Makefile.PL
+        working-directory: upstream-master
+        run: |
+          perl Makefile.PL
+          make test
