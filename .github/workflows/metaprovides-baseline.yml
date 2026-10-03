@@ -144,6 +144,7 @@ jobs:
         run: |
           cpanm --notest Hash::Merge::Simple
           cpanm --notest Dist::Zilla
+          cpanm --notest Dist::Zilla::Plugin::Bootstrap::lib
           cpanm --notest --installdeps .
       - name: Attempt historical flattened dist.ini build
         working-directory: upstream-master
