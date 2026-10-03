@@ -1,5 +1,7 @@
 # Mentoring, responsibility, and handoff
 
+**English** | [日本語](MAINTAINER_PATH.ja.md)
+
 CPAN Rescue treats maintenance as stewardship, not permanent ownership. Responsibility should grow deliberately, and stepping back should be a normal supported outcome.
 
 ## Responsibility levels
