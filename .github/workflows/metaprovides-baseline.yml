@@ -149,6 +149,7 @@ jobs:
           cpanm --notest 'Dist::Zilla::Plugin::MetaProvides::Package@2.004003'
           cpanm --notest Dist::Zilla::Plugin::MetaData::BuiltWith
           cpanm --notest Dist::Zilla::Plugin::Git::Contributors
+          cpanm --notest Dist::Zilla::Plugin::Git::GatherDir
           cpanm --notest --installdeps .
       - name: Attempt historical flattened dist.ini build
         working-directory: upstream-master
