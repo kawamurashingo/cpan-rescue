@@ -24,3 +24,7 @@ These failures do **not by themselves** demonstrate a regression in the MetaProv
 Keep the published-release baseline and downstream compatibility experiments visible in CI. Track the historical `dzil build` modernization independently in #49, rather than making the baseline workflow depend on an unfinished author-tooling migration.
 
 The GETTY/RSRCHBOY failures remain failing checks until their dependency problems are resolved or their role in the CI matrix is explicitly reconsidered. Do not mark them successful with `continue-on-error` merely to turn the workflow green.
+
+## CI policy after issue #54 triage
+
+The required pull-request baseline matrix covers the three downstream bundles with successful baseline and candidate runs: `Author::ETHER`, `DROLSKY`, and `Starter` (Perl 5.40 and 5.42). The two historically failing bundles (`Author::GETTY` and `RSRCHBOY`) are **not silently ignored**: they are retained in `.github/workflows/metaprovides-historical-downstream.yml` as an explicitly named, manually dispatched informational workflow. Its jobs still fail normally when dependency installation fails. Trigger it from GitHub Actions when revisiting compatibility; record outcomes in #54. This separation does not mean GETTY or RSRCHBOY compatibility is proven.
