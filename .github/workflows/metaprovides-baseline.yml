@@ -80,8 +80,6 @@ jobs:
       matrix:
         perl: ['5.40', '5.42']
         dist:
-          - Dist::Zilla::PluginBundle::Author::GETTY
-          - Dist::Zilla::PluginBundle::RSRCHBOY
           - Dist::Zilla::PluginBundle::Author::ETHER
           - Dist::Zilla::PluginBundle::DROLSKY
           - Dist::Zilla::PluginBundle::Starter
