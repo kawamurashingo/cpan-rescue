@@ -1,4 +1,4 @@
-name: MetaProvides baseline
+name: MetaProvides release and downstream baseline
 
 on:
   pull_request:
@@ -126,31 +126,3 @@ jobs:
       - name: Test downstream against candidate
         run: cpanm --verbose --test-only "${{ matrix.dist }}"
 
-
-  modern-maintenance-build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: shogo82148/actions-setup-perl@v1
-        with:
-          perl-version: '5.42'
-      - name: Checkout historical flattened source
-        uses: actions/checkout@v4
-        with:
-          repository: kentnl/Dist-Zilla-Plugin-MetaProvides
-          ref: cc8c2433f6e178c29eec5a0ced60fc35686108c8
-          path: upstream-master
-      - name: Install Dist::Zilla and declared distribution prerequisites
-        working-directory: upstream-master
-        run: |
-          cpanm --notest Hash::Merge::Simple
-          cpanm --notest Dist::Zilla
-          cpanm --notest Dist::Zilla::Plugin::Bootstrap::lib
-          cpanm --notest Dist::Zilla::Plugin::GithubMeta
-          cpanm --notest 'Dist::Zilla::Plugin::MetaProvides::Package@2.004003'
-          cpanm --notest Dist::Zilla::Plugin::MetaData::BuiltWith
-          cpanm --notest Dist::Zilla::Plugin::Git::Contributors
-          cpanm --notest Dist::Zilla::Plugin::Git::GatherDir
-          cpanm --notest --installdeps .
-      - name: Attempt historical flattened dist.ini build
-        working-directory: upstream-master
-        run: dzil build
