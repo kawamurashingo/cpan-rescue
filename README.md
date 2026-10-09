@@ -224,13 +224,14 @@ These should describe experience and responsibility, not create a contributor le
 
 ## Current project-development priorities
 
-1. [#28 — Define the CPAN Rescue maintainer path](https://github.com/kawamurashingo/cpan-rescue/issues/28)
-2. [#29 — Create the first good-first-maintenance tasks](https://github.com/kawamurashingo/cpan-rescue/issues/29)
-3. [#30 — Document mentoring, responsibility, and maintainer handoff policy](https://github.com/kawamurashingo/cpan-rescue/issues/30)
-4. Continue existing rescue work conservatively while using it to validate the incubation model.
-5. Turn the proven maintenance-release workflow into reusable contributor documentation.
-6. [#40 — Explore sustainable maintenance and funding for DBD::ODBC](https://github.com/kawamurashingo/cpan-rescue/issues/40): use DBD::ODBC as a concrete case for exploring how high-impact CPAN infrastructure can fund maintenance capacity without making sponsorship a source of technical control.
-7. [#41 — Build a high-impact CPAN rescue and sustainability portfolio](https://github.com/kawamurashingo/cpan-rescue/issues/41): keep a sourced shortlist of high-impact rescue, co-maintenance, funding, and migration candidates, and promote them into dedicated rescue issues only when there is a bounded first task.
+Completed foundations: [#28 — maintainer path](https://github.com/kawamurashingo/cpan-rescue/issues/28), [#29 — good-first-maintenance tasks](https://github.com/kawamurashingo/cpan-rescue/issues/29), and [#30 — mentoring and handoff policy](https://github.com/kawamurashingo/cpan-rescue/issues/30).
+
+1. [#36 — Run the first external-contributor incubation cycle](https://github.com/kawamurashingo/cpan-rescue/issues/36): validate the full journey from finding a task through review and a maintenance record.
+2. [#50 — Reproduce the MetaProvides 2.002004 baseline in CI](https://github.com/kawamurashingo/cpan-rescue/pull/50): review the draft CI work and its evidence before deciding whether it is ready to merge; keep author-tooling modernization separate in [#49](https://github.com/kawamurashingo/cpan-rescue/issues/49).
+3. Continue existing rescue work conservatively while using it to validate the incubation model.
+4. Turn the proven maintenance-release workflow into reusable contributor documentation.
+5. [#40 — Explore sustainable maintenance and funding for DBD::ODBC](https://github.com/kawamurashingo/cpan-rescue/issues/40): start with maintainer consent and actual maintenance needs.
+6. [#41 — Build a high-impact CPAN rescue and sustainability portfolio](https://github.com/kawamurashingo/cpan-rescue/issues/41): maintain a sourced shortlist and promote candidates only when there is a bounded first task.
 
 ## Sustainable maintenance
 
