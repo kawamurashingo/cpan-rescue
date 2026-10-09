@@ -1,0 +1,27 @@
+# Informational historical compatibility checks. Intentionally separate from
+# the required release/downstream baseline workflow; failures remain visible.
+name: MetaProvides historical downstream compatibility (informational)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  historical-downstream-baseline:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        perl: ['5.40', '5.42']
+        dist:
+          - Dist::Zilla::PluginBundle::Author::GETTY
+          - Dist::Zilla::PluginBundle::RSRCHBOY
+    steps:
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: ${{ matrix.perl }}
+      - name: Record environment
+        run: perl -V
+      - name: Install known prerequisite with upstream test-suite incompatibility
+        run: cpanm --notest Hash::Merge::Simple
+      - name: Establish historical downstream baseline
+        run: cpanm --verbose --test-only "${{ matrix.dist }}"
