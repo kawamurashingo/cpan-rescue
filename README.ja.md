@@ -222,13 +222,14 @@ incubation モデルが発展するにつれて、次の点も追跡していき
 
 ## 現在のプロジェクト開発優先事項
 
-1. [#28 — CPAN Rescue の maintainer path を定義する](https://github.com/kawamurashingo/cpan-rescue/issues/28)
-2. [#29 — 最初の good-first-maintenance タスクを作る](https://github.com/kawamurashingo/cpan-rescue/issues/29)
-3. [#30 — メンタリング、責任、maintainer handoff 方針を文書化する](https://github.com/kawamurashingo/cpan-rescue/issues/30)
-4. incubation モデルの検証に活用しながら、既存の rescue 作業を保守的に継続する。
-5. 実証済みの maintenance-release ワークフローを、再利用可能な contributor 向けドキュメントにする。
-6. [#40 — DBD::ODBC の持続可能なメンテナンスと資金調達を検討する](https://github.com/kawamurashingo/cpan-rescue/issues/40): 高影響な CPAN 基盤ソフトウェアが、スポンサーによる技術支配を招かずにメンテナンス能力へ資金を供給できる方法を探る具体例として DBD::ODBC を使う。
-7. [#41 — 高影響 CPAN の rescue / sustainability ポートフォリオを作る](https://github.com/kawamurashingo/cpan-rescue/issues/41): rescue、co-maintenance、資金調達、移行候補の根拠付き shortlist を維持し、範囲を限定した最初のタスクができたものだけ専用 rescue issue に昇格させる。
+完了した基盤整備: [#28 — maintainer path](https://github.com/kawamurashingo/cpan-rescue/issues/28)、[#29 — good-first-maintenance タスク](https://github.com/kawamurashingo/cpan-rescue/issues/29)、[#30 — メンタリングと引き継ぎ方針](https://github.com/kawamurashingo/cpan-rescue/issues/30)。
+
+1. [#36 — 最初の外部コントリビューターによる incubation cycle](https://github.com/kawamurashingo/cpan-rescue/issues/36): タスクの発見からレビュー、maintenance record までの一連の体験を検証する。
+2. [#50 — MetaProvides 2.002004 の CI ベースライン再現](https://github.com/kawamurashingo/cpan-rescue/pull/50): draft PR のCI結果と根拠を確認してからマージ可否を判断する。author tooling の現代化は [#49](https://github.com/kawamurashingo/cpan-rescue/issues/49) で別途進める。
+3. incubation モデルの検証に活用しながら、既存の rescue 作業を保守的に継続する。
+4. 実証済みの maintenance-release ワークフローを、再利用可能な contributor 向けドキュメントにする。
+5. [#40 — DBD::ODBC の持続可能なメンテナンスと資金調達](https://github.com/kawamurashingo/cpan-rescue/issues/40): まず既存メンテナの同意と実際のメンテナンス需要を確認する。
+6. [#41 — 高影響 CPAN の rescue / sustainability ポートフォリオ](https://github.com/kawamurashingo/cpan-rescue/issues/41): 根拠付き shortlist を維持し、範囲を限定した最初のタスクができた候補だけを昇格させる。
 
 ## 持続可能なメンテナンス
 
