@@ -19,6 +19,12 @@ jobs:
           repository: kentnl/Dist-Zilla-Plugin-MetaProvides
           ref: cc8c2433f6e178c29eec5a0ced60fc35686108c8
           path: upstream-master
+          fetch-depth: 0
+      - name: Restore historical master branch for Git NextRelease
+        working-directory: upstream-master
+        run: |
+          git switch -c master HEAD
+          git rev-parse HEAD
       - name: Identify missing author dependencies
         working-directory: upstream-master
         run: dzil authordeps --missing || true
