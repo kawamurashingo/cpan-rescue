@@ -44,6 +44,8 @@ jobs:
         run: cpanm --verbose Dist::Zilla::Plugin::Test::ReportPrereqs
       - name: Install Test Kwalitee author plugin
         run: cpanm --verbose Dist::Zilla::Plugin::Test::Kwalitee
+      - name: Install Test EOL author plugin
+        run: cpanm --verbose Dist::Zilla::Plugin::Test::EOL
       - name: Attempt historical build
         if: always()
         working-directory: upstream-master
