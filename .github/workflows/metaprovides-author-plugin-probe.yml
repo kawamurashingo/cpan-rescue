@@ -28,6 +28,8 @@ jobs:
         run: cpanm --verbose Dist::Zilla::Plugin::GithubMeta
       - name: Install MetaProvides Package author plugin
         run: cpanm --verbose Dist::Zilla::Plugin::MetaProvides::Package
+      - name: Install MetaData BuiltWith author plugin
+        run: cpanm --verbose Dist::Zilla::Plugin::MetaData::BuiltWith
       - name: Attempt historical build
         if: always()
         working-directory: upstream-master
