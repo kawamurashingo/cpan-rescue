@@ -25,6 +25,8 @@ jobs:
         run: |
           git switch -c master HEAD
           git rev-parse HEAD
+          git config --local user.name 'cpan-rescue diagnostic'
+          git config --local user.email 'diagnostic@example.invalid'
       - name: Identify missing author dependencies
         working-directory: upstream-master
         run: dzil authordeps --missing || true
