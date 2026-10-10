@@ -72,6 +72,12 @@ jobs:
         run: cpanm --verbose Dist::Zilla::Plugin::RunExtraTests
       - name: Install Git NextRelease author plugin
         run: cpanm --verbose Dist::Zilla::Plugin::Git::NextRelease
+      - name: Remove release-only Twitter plugin from diagnostic config
+        working-directory: upstream-master
+        run: |
+          # Twitter implements AfterRelease; no build/runtime role is replaced.
+          perl -0777 -i -pe 's{^\[Twitter[^\n]*\]\n.*?(?=^\[)}{}ms == 1 or die "Expected exactly one Twitter section\n"; s/^Dist::Zilla::Plugin::Twitter = 0\n//m;' dist.ini
+          git diff -- dist.ini
       - name: Attempt historical build
         if: always()
         working-directory: upstream-master
