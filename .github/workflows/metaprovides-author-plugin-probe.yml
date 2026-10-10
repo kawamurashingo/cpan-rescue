@@ -1,0 +1,29 @@
+name: MetaProvides author plugin diagnostic
+
+on:
+  workflow_dispatch:
+
+jobs:
+  plugin-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: '5.40'
+      - name: Install Dist::Zilla
+        run: cpanm --notest Dist::Zilla
+      - name: Checkout historical upstream
+        uses: actions/checkout@v4
+        with:
+          repository: kentnl/Dist-Zilla-Plugin-MetaProvides
+          ref: cc8c2433f6e178c29eec5a0ced60fc35686108c8
+          path: upstream-master
+      - name: Identify missing author dependencies
+        working-directory: upstream-master
+        run: dzil authordeps --missing
+      - name: Install first known missing plugin
+        run: cpanm --verbose Dist::Zilla::Plugin::MetaYAML::Minimal
+      - name: Attempt historical build
+        working-directory: upstream-master
+        run: dzil build
