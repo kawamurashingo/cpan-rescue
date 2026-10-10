@@ -70,6 +70,8 @@ jobs:
         run: cpanm --verbose Dist::Zilla::Plugin::Test::CPAN::Changes
       - name: Install RunExtraTests author plugin
         run: cpanm --verbose Dist::Zilla::Plugin::RunExtraTests
+      - name: Install Git NextRelease author plugin
+        run: cpanm --verbose Dist::Zilla::Plugin::Git::NextRelease
       - name: Attempt historical build
         if: always()
         working-directory: upstream-master
