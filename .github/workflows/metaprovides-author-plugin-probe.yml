@@ -50,6 +50,8 @@ jobs:
         run: cpanm --verbose Dist::Zilla::Plugin::Test::MinimumVersion
       - name: Install Test Compile PerFile author plugin
         run: cpanm --verbose Dist::Zilla::Plugin::Test::Compile::PerFile
+      - name: Install Test Perl Critic author plugin
+        run: cpanm --verbose Dist::Zilla::Plugin::Test::Perl::Critic
       - name: Attempt historical build
         if: always()
         working-directory: upstream-master
