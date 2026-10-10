@@ -62,6 +62,8 @@ jobs:
         run: cpanm --verbose Dist::Zilla::Plugin::MinimumPerl
       - name: Install Authority author plugin
         run: cpanm --verbose Dist::Zilla::Plugin::Authority
+      - name: Install Author KENTNL RecommendFixes author plugin
+        run: cpanm --verbose Dist::Zilla::Plugin::Author::KENTNL::RecommendFixes
       - name: Attempt historical build
         if: always()
         working-directory: upstream-master
