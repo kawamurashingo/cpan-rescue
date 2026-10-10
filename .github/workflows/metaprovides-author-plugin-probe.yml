@@ -66,6 +66,8 @@ jobs:
         run: cpanm --verbose Dist::Zilla::Plugin::Author::KENTNL::RecommendFixes
       - name: Install Readme Brief author plugin
         run: cpanm --verbose Dist::Zilla::Plugin::Readme::Brief
+      - name: Install Test CPAN Changes author plugin
+        run: cpanm --verbose Dist::Zilla::Plugin::Test::CPAN::Changes
       - name: Attempt historical build
         if: always()
         working-directory: upstream-master
