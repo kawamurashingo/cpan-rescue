@@ -76,6 +76,8 @@ jobs:
         run: cpanm --verbose Dist::Zilla::Plugin::Prereqs::Upgrade
       - name: Install Prereqs Recommend MatchInstalled author plugin
         run: cpanm --verbose Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled
+      - name: Install RemovePrereqs Provided author plugin
+        run: cpanm --verbose Dist::Zilla::Plugin::RemovePrereqs::Provided
       - name: Remove release-only Twitter plugin from diagnostic config
         if: always()
         working-directory: upstream-master
