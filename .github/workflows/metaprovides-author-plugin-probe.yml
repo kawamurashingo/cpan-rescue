@@ -38,6 +38,8 @@ jobs:
         run: cpanm --verbose Dist::Zilla::Plugin::Author::KENTNL::TravisCI
       - name: Install KENTNL CONTRIBUTING author plugin
         run: cpanm --verbose Dist::Zilla::Plugin::Author::KENTNL::CONTRIBUTING
+      - name: Install CopyFilesFromBuild author plugin
+        run: cpanm --verbose Dist::Zilla::Plugin::CopyFilesFromBuild
       - name: Attempt historical build
         if: always()
         working-directory: upstream-master
