@@ -42,6 +42,8 @@ jobs:
         run: cpanm --verbose Dist::Zilla::Plugin::CopyFilesFromBuild
       - name: Install Test ReportPrereqs author plugin
         run: cpanm --verbose Dist::Zilla::Plugin::Test::ReportPrereqs
+      - name: Install Test Kwalitee author plugin
+        run: cpanm --verbose Dist::Zilla::Plugin::Test::Kwalitee
       - name: Attempt historical build
         if: always()
         working-directory: upstream-master
