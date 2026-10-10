@@ -36,6 +36,8 @@ jobs:
         run: cpanm --verbose Dist::Zilla::Plugin::Git::GatherDir
       - name: Install KENTNL TravisCI author plugin
         run: cpanm --verbose Dist::Zilla::Plugin::Author::KENTNL::TravisCI
+      - name: Install KENTNL CONTRIBUTING author plugin
+        run: cpanm --verbose Dist::Zilla::Plugin::Author::KENTNL::CONTRIBUTING
       - name: Attempt historical build
         if: always()
         working-directory: upstream-master
