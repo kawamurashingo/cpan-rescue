@@ -32,6 +32,8 @@ jobs:
         run: cpanm --verbose Dist::Zilla::Plugin::MetaData::BuiltWith
       - name: Install Git Contributors author plugin
         run: cpanm --verbose Dist::Zilla::Plugin::Git::Contributors
+      - name: Install Git GatherDir author plugin
+        run: cpanm --verbose Dist::Zilla::Plugin::Git::GatherDir
       - name: Attempt historical build
         if: always()
         working-directory: upstream-master
