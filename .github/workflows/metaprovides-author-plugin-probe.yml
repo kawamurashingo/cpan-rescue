@@ -48,6 +48,8 @@ jobs:
         run: cpanm --verbose Dist::Zilla::Plugin::Test::EOL
       - name: Install Test MinimumVersion author plugin
         run: cpanm --verbose Dist::Zilla::Plugin::Test::MinimumVersion
+      - name: Install Test Compile PerFile author plugin
+        run: cpanm --verbose Dist::Zilla::Plugin::Test::Compile::PerFile
       - name: Attempt historical build
         if: always()
         working-directory: upstream-master
