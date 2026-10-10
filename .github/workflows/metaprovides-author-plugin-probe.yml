@@ -54,6 +54,8 @@ jobs:
         run: cpanm --verbose Dist::Zilla::Plugin::Test::Perl::Critic
       - name: Install RewriteVersion Sanitized author plugin
         run: cpanm --verbose Dist::Zilla::Plugin::RewriteVersion::Sanitized
+      - name: Install PodWeaver author plugin
+        run: cpanm --verbose Dist::Zilla::Plugin::PodWeaver
       - name: Attempt historical build
         if: always()
         working-directory: upstream-master
