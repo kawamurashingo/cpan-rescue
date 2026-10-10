@@ -26,6 +26,8 @@ jobs:
         run: cpanm --verbose Dist::Zilla::Plugin::MetaYAML::Minimal
       - name: Install next known missing plugin
         run: cpanm --verbose Dist::Zilla::Plugin::GithubMeta
+      - name: Install MetaProvides Package author plugin
+        run: cpanm --verbose Dist::Zilla::Plugin::MetaProvides::Package
       - name: Attempt historical build
         if: always()
         working-directory: upstream-master
