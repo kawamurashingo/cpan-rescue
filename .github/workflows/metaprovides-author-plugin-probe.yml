@@ -21,9 +21,10 @@ jobs:
           path: upstream-master
       - name: Identify missing author dependencies
         working-directory: upstream-master
-        run: dzil authordeps --missing
+        run: dzil authordeps --missing || true
       - name: Install first known missing plugin
         run: cpanm --verbose Dist::Zilla::Plugin::MetaYAML::Minimal
       - name: Attempt historical build
+        if: always()
         working-directory: upstream-master
         run: dzil build
