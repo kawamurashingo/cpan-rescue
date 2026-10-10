@@ -58,6 +58,8 @@ jobs:
         run: cpanm --verbose Dist::Zilla::Plugin::PodWeaver
       - name: Install Prereqs AuthorDeps author plugin
         run: cpanm --verbose Dist::Zilla::Plugin::Prereqs::AuthorDeps
+      - name: Install MinimumPerl author plugin
+        run: cpanm --verbose Dist::Zilla::Plugin::MinimumPerl
       - name: Attempt historical build
         if: always()
         working-directory: upstream-master
