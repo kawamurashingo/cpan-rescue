@@ -56,6 +56,8 @@ jobs:
         run: cpanm --verbose Dist::Zilla::Plugin::RewriteVersion::Sanitized
       - name: Install PodWeaver author plugin
         run: cpanm --verbose Dist::Zilla::Plugin::PodWeaver
+      - name: Install Prereqs AuthorDeps author plugin
+        run: cpanm --verbose Dist::Zilla::Plugin::Prereqs::AuthorDeps
       - name: Attempt historical build
         if: always()
         working-directory: upstream-master
