@@ -1,0 +1,82 @@
+name: SOAP Lite parser regression investigation
+on:
+  push:
+    branches:
+      - rescue/soap-lite-xml-parser-248
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  soap-parser-compatibility:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        xml_parser: ['2.47', '2.48', '2.54', '2.55', '2.59']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: '5.40'
+      - name: Install Expat build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libexpat1-dev
+      - name: Install SOAP::Lite 1.27 and pinned XML::Parser
+        env:
+          PARSER_VERSION: ${{ matrix.xml_parser }}
+        run: |
+          cpanm --notest --quiet SOAP::Lite@1.27
+          cpanm --notest --quiet "https://backpan.perl.org/authors/id/T/TO/TODDR/XML-Parser-${PARSER_VERSION}.tar.gz"
+          perl -MXML::Parser -e 'print "XML::Parser $XML::Parser::VERSION\n"; die "wrong parser version" unless $XML::Parser::VERSION eq $ARGV[0]' "$PARSER_VERSION"
+      - name: Checkout pinned SOAP::Lite upstream source
+        run: |
+          git clone --quiet https://github.com/redhotpenguin/perl-soaplite.git upstream
+          git -C upstream checkout --detach 66be2ded5b45e36763b2501a3d1f25e804fcf331
+      - name: Verify original behavior
+        run: |
+          perl -I upstream/lib investigations/soap-lite-xml-parser-248/verify_parser_char.t baseline
+      - name: Diagnose CDATA and entity behavior before patch
+        run: |
+          perl -I upstream/lib investigations/soap-lite-xml-parser-248/diagnose_core.pl baseline
+      - name: Record upstream core baseline (legacy failures are non-gating)
+        run: |
+          (cd upstream && prove -Ilib t/01-core.t) > core-before.txt 2>&1 || true
+          cat core-before.txt
+      - name: Apply minimal candidate patch
+        run: |
+          git -C upstream apply ../investigations/soap-lite-xml-parser-248/soap-lite-parser-char-guard.patch
+      - name: Verify patched behavior and malformed XML rejection
+        run: |
+          perl -I upstream/lib investigations/soap-lite-xml-parser-248/verify_parser_char.t patched
+      - name: Diagnose CDATA and entity behavior after patch
+        run: |
+          perl -I upstream/lib investigations/soap-lite-xml-parser-248/diagnose_core.pl patched
+      - name: Run upstream SOAP payload and array-deserialization tests
+        run: |
+          cd upstream
+          prove -Ilib t/Issues/gh17.t t/02-payload.t t/013-array-deserialization.t
+      - name: Classify upstream SOAP core outcome relative to baseline
+        env:
+          PARSER_VERSION: ${{ matrix.xml_parser }}
+        run: |
+          (cd upstream && prove -Ilib t/01-core.t) > core-after.txt 2>&1 || true
+          cat core-after.txt
+          if [[ "$PARSER_VERSION" == "2.48" || "$PARSER_VERSION" == "2.54" ]]; then
+            # Before the fix the affected parser versions abort early.
+            # After the fix it completes all 42; remaining assertions are
+            # independently reported, not hidden or claimed green.
+            grep -q 'subscript -1' core-before.txt
+            grep -q 'Tests=42' core-after.txt
+            if grep -q 'subscript -1' core-after.txt; then
+              echo "the original empty-stack error remains"
+              exit 1
+            fi
+            echo "affected XML::Parser core test progressed from early abort to 42 executed cases"
+          else
+            # On 2.47 and 2.59, the known pre-existing core failures must
+            # not change in either direction without investigation.
+            diff -u <(grep '^# Failed test' core-before.txt || true) <(grep '^# Failed test' core-after.txt || true)
+          fi
