@@ -64,8 +64,8 @@ jobs:
         run: |
           (cd upstream && prove -Ilib t/01-core.t) > core-after.txt 2>&1 || true
           cat core-after.txt
-          if [[ "$PARSER_VERSION" == "2.48" ]]; then
-            # Before the fix the core test aborts after 9 of 42 cases.
+          if [[ "$PARSER_VERSION" == "2.48" || "$PARSER_VERSION" == "2.54" ]]; then
+            # Before the fix the affected parser versions abort early.
             # After the fix it completes all 42; remaining assertions are
             # independently reported, not hidden or claimed green.
             grep -q 'subscript -1' core-before.txt
@@ -74,7 +74,7 @@ jobs:
               echo "the original empty-stack error remains"
               exit 1
             fi
-            echo "2.48 core test progressed from early abort to 42 executed cases"
+            echo "affected XML::Parser core test progressed from early abort to 42 executed cases"
           else
             # On 2.47 and 2.59, the known pre-existing core failures must
             # not change in either direction without investigation.
