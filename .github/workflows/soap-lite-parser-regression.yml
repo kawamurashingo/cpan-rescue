@@ -52,8 +52,25 @@ jobs:
         run: |
           cd upstream
           prove -Ilib t/02-payload.t t/013-array-deserialization.t
-      - name: Verify SOAP core baseline failure profile was not worsened
+      - name: Classify upstream SOAP core outcome relative to baseline
+        env:
+          PARSER_VERSION: ${{ matrix.xml_parser }}
         run: |
           (cd upstream && prove -Ilib t/01-core.t) > core-after.txt 2>&1 || true
           cat core-after.txt
-          diff -u <(grep '^# Failed test' core-before.txt || true) <(grep '^# Failed test' core-after.txt || true)
+          if [[ "$PARSER_VERSION" == "2.48" ]]; then
+            # Before the fix the core test aborts after 9 of 42 cases.
+            # After the fix it completes all 42; remaining assertions are
+            # independently reported, not hidden or claimed green.
+            grep -q 'subscript -1' core-before.txt
+            grep -q 'Tests=42' core-after.txt
+            if grep -q 'subscript -1' core-after.txt; then
+              echo "the original empty-stack error remains"
+              exit 1
+            fi
+            echo "2.48 core test progressed from early abort to 42 executed cases"
+          else
+            # On 2.47 and 2.59, the known pre-existing core failures must
+            # not change in either direction without investigation.
+            diff -u <(grep '^# Failed test' core-before.txt || true) <(grep '^# Failed test' core-after.txt || true)
+          fi
