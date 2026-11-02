@@ -38,6 +38,9 @@ jobs:
       - name: Verify original behavior
         run: |
           perl -I upstream/lib investigations/soap-lite-xml-parser-248/verify_parser_char.t baseline
+      - name: Diagnose CDATA and entity behavior before patch
+        run: |
+          perl -I upstream/lib investigations/soap-lite-xml-parser-248/diagnose_core.pl baseline
       - name: Record upstream core baseline (legacy failures are non-gating)
         run: |
           (cd upstream && prove -Ilib t/01-core.t) > core-before.txt 2>&1 || true
@@ -48,6 +51,9 @@ jobs:
       - name: Verify patched behavior and malformed XML rejection
         run: |
           perl -I upstream/lib investigations/soap-lite-xml-parser-248/verify_parser_char.t patched
+      - name: Diagnose CDATA and entity behavior after patch
+        run: |
+          perl -I upstream/lib investigations/soap-lite-xml-parser-248/diagnose_core.pl patched
       - name: Run upstream SOAP payload and array-deserialization tests
         run: |
           cd upstream
