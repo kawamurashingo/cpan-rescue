@@ -38,13 +38,22 @@ jobs:
       - name: Verify original behavior
         run: |
           perl -I upstream/lib investigations/soap-lite-xml-parser-248/verify_parser_char.t baseline
+      - name: Record upstream core baseline (legacy failures are non-gating)
+        run: |
+          (cd upstream && prove -Ilib t/01-core.t) > core-before.txt 2>&1 || true
+          cat core-before.txt
       - name: Apply minimal candidate patch
         run: |
           git -C upstream apply ../investigations/soap-lite-xml-parser-248/soap-lite-parser-char-guard.patch
       - name: Verify patched behavior and malformed XML rejection
         run: |
           perl -I upstream/lib investigations/soap-lite-xml-parser-248/verify_parser_char.t patched
-      - name: Run representative upstream SOAP parser tests
+      - name: Run upstream SOAP payload and array-deserialization tests
         run: |
           cd upstream
-          prove -Ilib t/01-core.t t/02-payload.t t/013-array-deserialization.t
+          prove -Ilib t/02-payload.t t/013-array-deserialization.t
+      - name: Verify SOAP core baseline failure profile was not worsened
+        run: |
+          (cd upstream && prove -Ilib t/01-core.t) > core-after.txt 2>&1 || true
+          cat core-after.txt
+          diff -u <(grep '^# Failed test' core-before.txt || true) <(grep '^# Failed test' core-after.txt || true)
