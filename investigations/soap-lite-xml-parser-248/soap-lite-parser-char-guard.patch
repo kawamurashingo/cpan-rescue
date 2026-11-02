@@ -18,3 +18,38 @@ diff --git a/lib/SOAP/Lite.pm b/lib/SOAP/Lite.pm
  
  sub end {
      my $self = shift;
+diff --git a/t/Issues/gh17.t b/t/Issues/gh17.t
+new file mode 100644
+--- /dev/null
++++ b/t/Issues/gh17.t
+@@ -0,0 +1,30 @@
++use strict;
++use warnings;
++use Test::More;
++use SOAP::Lite;
++
++my $xml = '<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">' .
++          '<env:Body><ping>ok</ping></env:Body></env:Envelope>';
++
++for my $case (
++    ['no trailing data', $xml],
++    ['trailing LF', $xml . "\n"],
++    ['trailing CRLF', $xml . "\r\n"],
++    ['trailing spaces', $xml . " \t "],
++) {
++    my ($label, $input) = @$case;
++    my $ok = eval { SOAP::Parser->new->decode($input); 1 };
++    ok($ok, "$label is valid SOAP XML") or diag($@);
++}
++
++for my $case (
++    ['non-whitespace', $xml . 'junk'],
++    ['second root', $xml . '<extra/>'],
++) {
++    my ($label, $input) = @$case;
++    my $ok = eval { SOAP::Parser->new->decode($input); 1 };
++    ok(!$ok, "$label after root is rejected");
++    ok(length($@) > 0, "$label reports an error");
++}
++
++done_testing();
