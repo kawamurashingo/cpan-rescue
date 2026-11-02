@@ -33,8 +33,11 @@ my @valid_documents = (
 for my $case (@valid_documents) {
     my ($name, $document, $has_tail) = @$case;
     my ($ok, $err, $parser) = attempt($document);
+    # Both 2.48 and 2.54 are confirmed affected; 2.55 reverted the
+    # underlying XML::Parser default-handler routing change.
+    my %affected = map { $_ => 1 } qw(2.48 2.54);
     my $regression_expected =
-        $phase eq 'baseline' && $xml_parser_version eq '2.48' && $has_tail;
+        $phase eq 'baseline' && $affected{$xml_parser_version} && $has_tail;
     if ($regression_expected) {
         ok(!$ok, "$name: unpatched regression is reproduced");
         like($err, qr/non-creatable array value|subscript -1/,
