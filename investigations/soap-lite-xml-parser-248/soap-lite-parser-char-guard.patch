@@ -9,7 +9,7 @@ diff --git a/lib/SOAP/Lite.pm b/lib/SOAP/Lite.pm
 +sub char {
 +    my ($self, $chars) = @_;
 +    if (!@{$self->{_values} || []}) {
-+        # XML::Parser 2.48+ sends valid outside-root whitespace to Char.
++        # XML::Parser 2.48 can send outside-root whitespace to Char.
 +        return if $chars !~ /[^ \t\r\n]/;
 +        die "Character data outside the root element\n";
 +    }
