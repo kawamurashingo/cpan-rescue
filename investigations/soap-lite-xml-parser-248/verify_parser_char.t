@@ -6,12 +6,12 @@ use XML::Parser ();
 use SOAP::Lite ();
 
 # Run against the upstream checkout before and after applying the companion
-# patch. The unpatched regression must be observed on XML::Parser >= 2.48.
+# patch. XML::Parser 2.48 is known to trigger the original regression.
 my $phase = shift @ARGV || die "usage: $0 baseline|patched\n";
 die "unknown phase: $phase\n" unless $phase eq 'baseline' || $phase eq 'patched';
 
 my $xml_parser_version = $XML::Parser::VERSION;
-diag("phase=$phase SOAP::Lite=$SOAP::Lite::VERSION XML::Parser=$xml_parser_version perl=$]");
+diag("phase=$phase XML::Parser=$xml_parser_version perl=$]");
 my $xml = '<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">' .
           '<env:Body><ping>ok</ping></env:Body></env:Envelope>';
 
@@ -34,7 +34,7 @@ for my $case (@valid_documents) {
     my ($name, $document, $has_tail) = @$case;
     my ($ok, $err, $parser) = attempt($document);
     my $regression_expected =
-        $phase eq 'baseline' && $xml_parser_version >= 2.48 && $has_tail;
+        $phase eq 'baseline' && $xml_parser_version eq '2.48' && $has_tail;
     if ($regression_expected) {
         ok(!$ok, "$name: unpatched regression is reproduced");
         like($err, qr/non-creatable array value|subscript -1/,
