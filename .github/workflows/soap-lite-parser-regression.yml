@@ -41,7 +41,6 @@ jobs:
       - name: Apply minimal candidate patch
         run: |
           git -C upstream apply ../investigations/soap-lite-xml-parser-248/soap-lite-parser-char-guard.patch
-          perl -I upstream/lib -c upstream/lib/SOAP/Lite.pm
       - name: Verify patched behavior and malformed XML rejection
         run: |
           perl -I upstream/lib investigations/soap-lite-xml-parser-248/verify_parser_char.t patched
