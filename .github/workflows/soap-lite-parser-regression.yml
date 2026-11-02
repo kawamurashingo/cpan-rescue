@@ -1,0 +1,47 @@
+name: SOAP Lite parser regression investigation
+on:
+  push:
+    branches:
+      - rescue/soap-lite-xml-parser-248
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  soap-parser-compatibility:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        xml_parser: ['2.47', '2.48', '2.59']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: '5.40'
+      - name: Install Expat build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libexpat1-dev
+      - name: Install SOAP::Lite 1.27 and pinned XML::Parser
+        env:
+          PARSER_VERSION: ${{ matrix.xml_parser }}
+        run: |
+          cpanm --notest --quiet SOAP::Lite@1.27
+          cpanm --notest --quiet "https://backpan.perl.org/authors/id/T/TO/TODDR/XML-Parser-${PARSER_VERSION}.tar.gz"
+          perl -MXML::Parser -e 'print "XML::Parser $XML::Parser::VERSION\n"; die "wrong parser version" unless $XML::Parser::VERSION eq $ARGV[0]' "$PARSER_VERSION"
+      - name: Checkout pinned SOAP::Lite upstream source
+        run: |
+          git clone --quiet https://github.com/redhotpenguin/perl-soaplite.git upstream
+          git -C upstream checkout --detach 66be2ded5b45e36763b2501a3d1f25e804fcf331
+      - name: Verify original behavior
+        run: |
+          perl -I upstream/lib investigations/soap-lite-xml-parser-248/verify_parser_char.t baseline
+      - name: Apply minimal candidate patch
+        run: |
+          git -C upstream apply ../investigations/soap-lite-xml-parser-248/soap-lite-parser-char-guard.patch
+          perl -I upstream/lib -c upstream/lib/SOAP/Lite.pm
+      - name: Verify patched behavior and malformed XML rejection
+        run: |
+          perl -I upstream/lib investigations/soap-lite-xml-parser-248/verify_parser_char.t patched
