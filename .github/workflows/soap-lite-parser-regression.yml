@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        xml_parser: ['2.47', '2.48', '2.59']
+        xml_parser: ['2.47', '2.48', '2.54', '2.55', '2.59']
     steps:
       - uses: actions/checkout@v4
       - uses: shogo82148/actions-setup-perl@v1
