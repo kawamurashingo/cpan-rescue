@@ -57,7 +57,7 @@ jobs:
       - name: Run upstream SOAP payload and array-deserialization tests
         run: |
           cd upstream
-          prove -Ilib t/02-payload.t t/013-array-deserialization.t
+          prove -Ilib t/Issues/gh17.t t/02-payload.t t/013-array-deserialization.t
       - name: Classify upstream SOAP core outcome relative to baseline
         env:
           PARSER_VERSION: ${{ matrix.xml_parser }}
