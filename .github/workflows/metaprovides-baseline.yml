@@ -1,3 +1,7 @@
+# Required maintenance baseline: CPAN core/Package plus ETHER, DROLSKY, Starter.
+# Historical GETTY/RSRCHBOY checks are preserved separately in
+# metaprovides-historical-downstream.yml; their dependency failures are not green.
+# Context: https://github.com/kawamurashingo/cpan-rescue/issues/54
 name: MetaProvides release and downstream baseline
 
 on:
@@ -5,6 +9,10 @@ on:
     paths:
       - '.github/workflows/metaprovides-baseline.yml'
   workflow_dispatch:
+
+# This read-only workflow needs no write-capable GITHUB_TOKEN.
+permissions:
+  contents: read
 
 jobs:
   cpan-release-baseline:
