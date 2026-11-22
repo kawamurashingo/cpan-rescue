@@ -177,3 +177,11 @@ FreeBSD VM 152 の既存 rc.d に `/usr/sbin/daemon -f -H -R 60` を設定し、
 - ローテーション後も `service cpansmoker onestatus` は **PID 23755 で稼働中**を返した。
 
 以上により、**サービスを停止しないログローテーション**を実証しました。新しいログがその後も継続して伸びるか、次回の定期 newsyslog 実行、FreeBSD VM 再起動後の自動復帰は別途確認事項です。外部 CPAN Testers への投稿は File transport のローカル保存とは別工程です。
+
+### newsyslog 切り替え後の書き込み継続を確認（2026-11-22）
+
+強制ローテーション直後に約 **8.6 KB** だった新しい `cpansmoker.log` が、追跡確認では約 **276 KB** まで増加しました。`service cpansmoker onestatus` は同じ監視 PID **23755** を返し、`sysrc cpansmoker_enable` は **YES** を返しました。新しいログには **20ファイル／75テスト、All tests successful、Result: PASS** が記録されています。
+
+これで **ログローテーション後も既存の Smoker が新しいログへ書き込みながらテストを続行できること** を確認しました。
+
+**残課題**：VM 再起動後の自動復帰、長期連続運転、VM 151 を経由した投稿。以前の停止処理はテスト途中で長時間待機した実績があるため、再起動試験はテスト実行状況を確認し、停止計画を立ててから行います。

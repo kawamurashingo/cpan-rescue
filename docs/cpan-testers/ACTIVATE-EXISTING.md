@@ -140,3 +140,11 @@ The newsyslog configuration in `/usr/local/etc/newsyslog.conf.d/cpansmoker.conf`
 - `service cpansmoker onestatus` still reporting **PID 23755** afterward.
 
 This verifies a **non-disruptive manual rotation** with the service remaining active. Continued output growth, a subsequent automatically scheduled rotation, and recovery after a FreeBSD VM reboot are separate checks. Local File transport does not constitute public CPAN Testers submission.
+
+### Continued writing after log rotation verified (2026-11-22)
+
+The new `cpansmoker.log` grew from approximately **8.6 KB** immediately after rotation to **276 KB** at follow-up. `service cpansmoker onestatus` continued to report supervisor PID **23755** and `sysrc cpansmoker_enable` returned **YES**. New log output included **20 files / 75 tests, All tests successful, Result: PASS**.
+
+This confirms the active Smoker **continued writing into the new log and running tests after live rotation**.
+
+**Remaining:** recovery after an actual VM reboot, multi-day operation, and submitting via VM 151. A prior rc.d stop request waited for a prolonged time during active dependency tests; plan a maintenance window and inspect active tests before rebooting.
