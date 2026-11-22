@@ -89,3 +89,12 @@ qm guest exec 152 -- /usr/bin/tail -n 100 /home/cpansmoke/logs/cpansmoker.log
 qm guest exec 152 -- /usr/bin/find /home/cpansmoke/reports -type f -name '*.rpt' -print
 ~~~
 
+### Real smoke-test progress (2026-11-22, from 09:12 JST)
+
+The live VM log now shows `Smoker: found 44947 distributions on CPAN` and `Smoker: testing Mogura-0.01 [1/44947]`. The unrestricted smoker is selecting and running a distribution automatically. Several `Result: PASS` lines were observed, but they do **not** independently prove a completed final report was written.
+
+At this observation, the service reported PID 3664 and disk usage was 6% with 49 GB available. **Still unverified:** a final Mogura-0.01 .rpt, startup after a VM reboot, long-running reliability, and VM-to-VM transfer. Finding 44,947 candidate distributions does not mean 44,947 tests have completed.
+
+~~~sh
+qm guest exec 152 -- /usr/bin/find /home/cpansmoke/reports -type f -name '*.rpt' -print
+~~~

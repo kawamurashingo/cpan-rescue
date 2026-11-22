@@ -118,3 +118,14 @@ qm guest exec 152 -- /usr/bin/tail -n 100 /home/cpansmoke/logs/cpansmoker.log
 qm guest exec 152 -- /usr/bin/find /home/cpansmoke/reports -type f -name '*.rpt' -print
 ~~~
 
+### 実テストの進捗（2026-11-22 09:12 JST 以降）
+
+追加の実機ログで、`Smoker: found 44947 distributions on CPAN` と `Smoker: testing Mogura-0.01 [1/44947]` を確認しました。固定リストから外れ、CPAN の候補を自動選択してテストを開始できています。ログには `Result: PASS` が複数ありますが、これは最終的な .rpt が保存された証拠ではありません。
+
+同時点の状態は `cpansmoker is running as pid 3664.`、ディスク使用率 6%、空き容量 49 GB でした。**未確認**：Mogura-0.01 の最終レポート生成、VM 再起動後の自動復帰、長期間の運転、送信 VM への自動転送。44,947件すべてのテスト完了を意味する数字ではありません。
+
+レポート確認（Proxmox ホストから）：
+
+~~~sh
+qm guest exec 152 -- /usr/bin/find /home/cpansmoke/reports -type f -name '*.rpt' -print
+~~~
