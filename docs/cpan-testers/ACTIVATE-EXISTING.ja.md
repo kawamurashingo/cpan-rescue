@@ -185,3 +185,16 @@ FreeBSD VM 152 の既存 rc.d に `/usr/sbin/daemon -f -H -R 60` を設定し、
 これで **ログローテーション後も既存の Smoker が新しいログへ書き込みながらテストを続行できること** を確認しました。
 
 **残課題**：VM 再起動後の自動復帰、長期連続運転、VM 151 を経由した投稿。以前の停止処理はテスト途中で長時間待機した実績があるため、再起動試験はテスト実行状況を確認し、停止計画を立ててから行います。
+
+## FreeBSD VM 再起動後の自動復帰を実証（2026-11-22）
+
+Proxmox ホストで `qm shutdown 152 --timeout 240 --forceStop 0` を実行し、`qm status 152` の `status: stopped` を確認。その後 VM 152 を起動し、**手動の `service cpansmoker onestart` を実行せずに** FreeBSD ゲスト内で以下を確認した。
+
+- `service cpansmoker onestatus` → `cpansmoker is running as pid 1396.`
+- `sysrc cpansmoker_enable` → `cpansmoker_enable: YES`
+- CPAN::Reporter::Smoker 本体 → **PID 1397**、親 PID **1396**
+- 再開後の `cpansmoker.log` に `t/xs/*.t` の試験出力が継続
+
+**実証できたこと：** VM の正常停止後、OS 起動により Smoker が自動的に起動して試験を再開した。
+
+**未解決・別工程：** rc.d の停止コマンド単体では孤立 CPAN 子プロセスがログパイプを保持し得る問題が残る。OS 停止が成功したことは単独の rc.d 停止処理の完全な正常終了を意味しない。VM 151 の転送・外部投稿も未検証。
