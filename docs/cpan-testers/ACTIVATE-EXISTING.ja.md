@@ -99,3 +99,22 @@ qm guest exec 152 -- /bin/sh -c '
 これで**自動的な CPAN のテスト開始・継続**が対象です。**VM 151 へのファイル転送・CPAN Testers への自動投稿は別工程**で、この手順には含みません。
 
 注意：**qm guest exec の exitcode 0 は起動コマンドの成功であり、すべての CPAN ディストリビューションのテスト成功を意味しません。** ログと .rpt の生成結果を確認してください。
+
+## 構築実績の更新（2026-11-22）
+
+実際の FreeBSD VM 152 で次を確認しました。
+
+- 固定ディストリビューション設定を外したあと、CPAN インデックスの取得と `Smoker: scanning and sorting index` がログに記録された。
+- `service cpansmoker onestatus` は `cpansmoker is running as pid 3664.` を返した（確認時の PID であり恒久的な番号ではない）。
+- `sysrc cpansmoker_enable=YES` を実行し、再照会で `cpansmoker_enable: YES` を確認した。
+
+**未検証：** 再起動後の自動復帰、新規ディストリビューションのテスト完了と新しいレポート、長時間の無人運用。ローカル File transport のままで、VM 151 への自動送信はこのステップの対象外です。
+
+次の無停止確認（Proxmox ホストから）：
+
+~~~sh
+qm guest exec 152 -- /usr/sbin/service cpansmoker onestatus
+qm guest exec 152 -- /usr/bin/tail -n 100 /home/cpansmoke/logs/cpansmoker.log
+qm guest exec 152 -- /usr/bin/find /home/cpansmoke/reports -type f -name '*.rpt' -print
+~~~
+

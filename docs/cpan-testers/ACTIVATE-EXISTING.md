@@ -70,3 +70,22 @@ qm guest exec 152 -- /bin/sh -c '
 ~~~
 
 **This only automates test execution on VM 152**, not the VM 151 transfer/submission pipeline. An exitcode of 0 from **qm guest exec** does not prove a detached test later passed.
+
+## Observed activation status (2026-11-22)
+
+The actual FreeBSD test VM 152 has now:
+
+- Fetched the CPAN indexes and entered `Smoker: scanning and sorting index` without the former fixed distribution list.
+- Returned `cpansmoker is running as pid 3664.` from `service cpansmoker onestatus` (PID at observation time).
+- Successfully set and read back `cpansmoker_enable: YES` using `sysrc`.
+
+**Not yet verified:** automatic recovery after a VM reboot, completion of a *new* distribution test and report, or extended unattended reliability. File transport remains local; VM 151 sending is outside this activation step.
+
+Non-disruptive verification from the Proxmox host:
+
+~~~sh
+qm guest exec 152 -- /usr/sbin/service cpansmoker onestatus
+qm guest exec 152 -- /usr/bin/tail -n 100 /home/cpansmoke/logs/cpansmoker.log
+qm guest exec 152 -- /usr/bin/find /home/cpansmoke/reports -type f -name '*.rpt' -print
+~~~
+
