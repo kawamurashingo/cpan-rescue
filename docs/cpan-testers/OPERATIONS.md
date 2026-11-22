@@ -84,3 +84,39 @@ qm guest exec 152 -- /bin/sh -c '
 ~~~
 
 For the existing test VM, avoid a reboot solely for rotation setup. Reboot recovery can be verified in a separate planned maintenance window after observing at least one completed normal rotation and ensuring tests can be safely interrupted.
+
+## Verified pre-rotation state on the original VM (2026-11-22)
+
+The actual VM 152 showed:
+
+- Its rc.d line runs \`sudo -n -H -u cpansmoke /usr/sbin/daemon -f -R 60 ...\`: **sudo -H** is already present, but **daemon -H** is still absent.
+- \`/etc/newsyslog.conf\` includes \`/usr/local/etc/newsyslog.conf.d/[!.]*.conf\`.
+- No existing cpansmoker newsyslog rule was found.
+- \`cron\` is running.
+
+**Do not confuse the sudo and daemon flags.** The actual rc.d script must have the substring **/usr/sbin/daemon -f -H -R 60** before rotation can be enabled and the service must be restarted to apply it.
+
+Minimal, reversible update on the FreeBSD VM (backup to .before-newsyslog), performed only when interruption of the active test is acceptable:
+
+~~~sh
+rc=/usr/local/etc/rc.d/cpansmoker
+cp -p "$rc" "$rc.before-newsyslog"
+sed 's@/usr/sbin/daemon -f -R 60@/usr/sbin/daemon -f -H -R 60@' "$rc.before-newsyslog" > "$rc.new"
+sh -n "$rc.new" && grep -F "daemon -f -H -R 60" "$rc.new"
+# Stop the live service before replacing the script, then start it once.
+service cpansmoker onestop
+install -o root -g wheel -m 0555 "$rc.new" "$rc"
+rm -f "$rc.new"
+service cpansmoker onestart
+service cpansmoker onestatus
+~~~
+
+If replacement fails, restore **cpansmoker.before-newsyslog** and start the original service. Only after the restarted daemon is confirmed with **-H** should the accompanying newsyslog example be installed and previewed:
+
+~~~sh
+install -d -m 0755 /usr/local/etc/newsyslog.conf.d
+install -o root -g wheel -m 0644 docs/cpan-testers/newsyslog.conf.d/cpansmoker.conf /usr/local/etc/newsyslog.conf.d/cpansmoker.conf
+newsyslog -n -v -f /etc/newsyslog.conf /home/cpansmoke/logs/cpansmoker.log
+~~~
+
+The last command is a **dry run**, not a rotation. Run commands as FreeBSD root from the repository clone root, or use absolute paths to files. Avoid any forced rotation until you see a healthy live daemon supervisor, PID file and working output.
