@@ -4,6 +4,8 @@
 
 🌐 **Website:** https://cpan-rescue.com
 
+**Want to contribute test reports?** [Become a CPAN Tester on FreeBSD / Proxmox →](docs/cpan-testers/README.md).
+
 **CPAN Rescue grows maintainers by maintaining real software.**
 
 > **New here?** [Make your first CPAN Rescue contribution →](FIRST_CONTRIBUTOR.md)  

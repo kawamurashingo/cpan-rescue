@@ -1,0 +1,9 @@
+# Private operational data must never enter Git.
+*.rpt
+*.log
+*.pid
+metabase_id.json
+.cpanreporter/
+.cpan/
+reports/
+logs/

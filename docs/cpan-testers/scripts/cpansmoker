@@ -1,0 +1,19 @@
+#!/bin/sh
+#
+# PROVIDE: cpansmoker
+# REQUIRE: NETWORKING LOGIN
+# KEYWORD: shutdown
+#
+# FreeBSD rc.d reference; validate start/status/stop on your VM.
+. /etc/rc.subr
+name="cpansmoker"
+rcvar="cpansmoker_enable"
+load_rc_config "$name"
+: "${cpansmoker_enable:=NO}"
+
+pidfile="/home/cpansmoke/logs/cpansmoker.pid"
+procname="/usr/sbin/daemon"
+command="/usr/local/bin/sudo"
+command_args="-n -H -u cpansmoke /usr/sbin/daemon -f -R 60 -P $pidfile -o /home/cpansmoke/logs/cpansmoker.log /usr/local/libexec/cpansmoker-run"
+
+run_rc_command "$1"

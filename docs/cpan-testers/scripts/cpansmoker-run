@@ -1,0 +1,8 @@
+#!/bin/sh
+# Run as the non-root cpansmoke user; no fixed test distribution in production.
+set -eu
+unset PERL_CR_SMOKER_SHORTCUT
+unset PERL_CR_SMOKER_RUNONCE
+cd "$HOME"
+exec /usr/local/bin/perl -MCPAN::Reporter::Smoker \
+  -e 'start(install => 0, set_term_title => 0)'

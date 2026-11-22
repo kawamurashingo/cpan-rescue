@@ -2,6 +2,8 @@
 
 [English](README.md) | **日本語**
 
+**CPAN Testers に参加してみたい方へ：** [FreeBSD / Proxmox でテスターになる手順 →](docs/cpan-testers/README.ja.md)。
+
 **CPAN Rescue は、実際のソフトウェアをメンテナンスすることで、メンテナを育てるプロジェクトです。**
 
 > **初めて参加する方へ：** [最初の CPAN Rescue コントリビューションはこちら →](FIRST_CONTRIBUTOR.ja.md)  
