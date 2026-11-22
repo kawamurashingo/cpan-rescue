@@ -49,3 +49,10 @@ sh -n /usr/local/etc/rc.d/cpansmoker
 ~~~
 
 **Caution:** blindly restoring the old script while running is possible, but it also restores its potentially unbounded stop behavior. Inspect the active processes and prefer to fix the candidate if an error is discovered.
+
+## Live test: 90-second timeout (2026-11-22)
+
+Applied the candidate rc.d on VM 152 and invoked `service cpansmoker onestop`. Supervisor PID **23755** remained after **90 seconds**; the stop returned **exit code 1** with `No SIGKILL sent.`. CPAN Attean test PID **23806** and child PID **40338** also remained.
+
+**Verified:** bounded waiting and non-forced failure. **Not yet verified:** successful graceful stop, one-instance restart, or VM reboot recovery. Do not run `onestart`, `restart`, reboot, or further signals until the supervisor/smoker/CPAN process tree is inspected read-only.
+

@@ -43,3 +43,10 @@ service cpansmoker onestop
 問題時は `/usr/local/etc/rc.d/cpansmoker.before-guarded-stop` から復元できますが、元のスクリプトは停止待ちが長引く可能性があることに注意してください。
 
 その後、別のメンテナンス時間に VM の再起動と自動復帰を試します。**VM 151 へのレポート投稿自動化は別工程**です。
+
+## 実機検証：90秒タイムアウト（2026-11-22）
+
+VM 152 に候補 rc.d を適用して `service cpansmoker onestop` を試した。事前の supervisor は PID **23755**。コマンドは **90秒で停止待ちを打ち切り、終了コード1** を返し、`No SIGKILL sent.` を明示した。停止後も supervisor **23755** が稼働し、Attean の CPAN テスト PID **23806** と子 PID **40338** が残っていた。
+
+**検証済み：停止待ちの時間上限と失敗時の非強制終了。未検証：正常停止・停止後の単一起動・VM 再起動。** 原因確認前に `onestart`、`restart`、再起動、追加のシグナルを送らない。監視 PID、Smoker 本体 PID、テスト PID のプロセス状態・親子関係・wait channel を読み取り専用で診断する。
+
