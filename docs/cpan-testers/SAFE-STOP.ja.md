@@ -50,3 +50,14 @@ VM 152 に候補 rc.d を適用して `service cpansmoker onestop` を試した�
 
 **検証済み：停止待ちの時間上限と失敗時の非強制終了。未検証：正常停止・停止後の単一起動・VM 再起動。** 原因確認前に `onestart`、`restart`、再起動、追加のシグナルを送らない。監視 PID、Smoker 本体 PID、テスト PID のプロセス状態・親子関係・wait channel を読み取り専用で診断する。
 
+## 実機検証：孤立した CPAN プロセスの調査と Smoker 復旧（2026-11-22）
+
+90秒タイムアウト後、`ps` で supervisor **23755** が `piperd`（パイプ読み込み待ち）になっており、Smoker 本体 **23756** は終了、Attean の CPAN 処理 **23806** は孤立して PPID=1 となっていることを確認。
+
+`fstat` により、supervisor **23755** の FD 7（pipe `ffffffe00511ed5c0` ↔ `ffffffe00511ed718`）と Attean **23806** の FD 1/2/4 が、**同じパイプの両端を保持している**ことを確認した。このため、子孫テストがログ用パイプを保持し続け、supervisor の終了を妨げていたと説明できる。
+
+孤立した Attean PID **23806** に対し、PPID・実行ユーザー・コマンドを照合した後に **SIGTERM のみ**送った。続く確認では supervisor PID **23755**、Smoker PID **23756**、Attean PID **23806** がすべて消え、`ps -U cpansmoke` も空、`service cpansmoker onestatus` は `not running` を返した。
+
+その後 `service cpansmoker onestart` に成功。新しい supervisor **43462**、Smoker 本体 **43463** が稼働し、CPAN インデックスの取得と走査を再開した。これは **孤立プロセスの手動解消後の単一起動**が成功した実績であり、自動的な正常停止・再起動を証明するものではない。
+
+**今後の課題：** 子孫がログパイプを継承したまま孤立しても安全に終了できる停止方法、VM 再起動後の自動起動、および VM 151 でのレポート投稿の検証。稼働中の Smoker に対する追加の停止実験を、無計画に繰り返さない。
