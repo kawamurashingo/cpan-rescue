@@ -120,3 +120,7 @@ newsyslog -n -v -f /etc/newsyslog.conf /home/cpansmoke/logs/cpansmoker.log
 ~~~
 
 The last command is a **dry run**, not a rotation. Run commands as FreeBSD root from the repository clone root, or use absolute paths to files. Avoid any forced rotation until you see a healthy live daemon supervisor, PID file and working output.
+
+## Bounded stop / preventing a second smoker
+
+The original service used rc.subr's default **stop**, which could wait for a long-running test. An **experimental, fail-closed** rc.d candidate and its upgrade/rollback steps are documented in [SAFE-STOP.md](SAFE-STOP.md) ([日本語](SAFE-STOP.ja.md)). It adds a 90-second bound and refuses a restart while any processes owned by the dedicated cpansmoke user remain. It does **not** automatically SIGKILL tests and has **not yet been tested on the original VM**. Do not treat it as a proven replacement until validated during a maintenance window.
