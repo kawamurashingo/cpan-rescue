@@ -56,3 +56,14 @@ Applied the candidate rc.d on VM 152 and invoked `service cpansmoker onestop`. S
 
 **Verified:** bounded waiting and non-forced failure. **Not yet verified:** successful graceful stop, one-instance restart, or VM reboot recovery. Do not run `onestart`, `restart`, reboot, or further signals until the supervisor/smoker/CPAN process tree is inspected read-only.
 
+## Live test: orphaned CPAN process and Smoker recovery (2026-11-22)
+
+After the 90-second stop timeout, supervisor **23755** remained in `piperd`, the original Smoker worker **23756** had exited, and the Attean CPAN process **23806** had become an orphan (PPID 1).
+
+`fstat` verified that the supervisor's pipe FD 7 and Attean's pipe FDs 1/2/4 referred to **opposite ends of the same kernel pipe**. This is consistent with the descendant retaining the log-output pipe and preventing the supervisor from exiting.
+
+After checking PID **23806** for PPID, user, and command, only **SIGTERM** was sent. A subsequent check found **no remaining cpansmoke-owned processes** (including supervisor 23755 and Attean 23806), and the service reported `not running`.
+
+A subsequent `service cpansmoker onestart` succeeded: supervisor **43462** and Smoker worker **43463** were running, and the Smoker resumed retrieving and scanning the CPAN index. This **proves a successful single-instance restart after manual orphan cleanup**, but **does not prove automatic graceful shutdown or boot recovery**.
+
+**Remaining:** robust handling of detached descendants that retain output pipes, controlled VM reboot/boot recovery, and verification of the submission workflow on VM 151. Avoid repeated disruptive stop experiments on an active smoke test without a maintenance plan.
