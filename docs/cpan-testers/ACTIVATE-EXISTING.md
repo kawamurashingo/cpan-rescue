@@ -98,3 +98,20 @@ At this observation, the service reported PID 3664 and disk usage was 6% with 49
 ~~~sh
 qm guest exec 152 -- /usr/bin/find /home/cpansmoke/reports -type f -name '*.rpt' -print
 ~~~
+
+### Automatic report generation confirmed (2026-11-22)
+
+The unrestricted smoker on VM 152 selected `Mogura-0.01 [1/44947]`, followed by `SNMP-Info-3.985003 [2/44947]`. Newly written **local File transport reports** appeared in `/home/cpansmoke/reports/`.
+
+In the last 20 files listed, **19 PASS** reports and **one FAIL** report were shown, including:
+
+- `fail.Mogura-0.01.*.rpt`
+- `pass.DBD-SQLite-1.78.*.rpt`
+- `pass.Mojolicious-9.54.*.rpt`
+- `pass.Module-Build-0.4234.*.rpt`
+
+Dependency distributions were tested as well. **A FAIL report is not itself a smoker-service failure**; inspect the report body to diagnose the actual test failure. The 19/1 split is based only on the displayed last 20 files, **not** a full running total.
+
+**Verified:** automatic CPAN target selection, build/test activity, local PASS and FAIL report generation, running service, and `cpansmoker_enable=YES` configuration.
+
+**Not yet verified:** VM-reboot auto-recovery, long-term stability, or submission to public CPAN Testers through VM 151. The test VM retains File transport.

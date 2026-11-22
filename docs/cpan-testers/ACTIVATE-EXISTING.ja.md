@@ -129,3 +129,20 @@ qm guest exec 152 -- /usr/bin/find /home/cpansmoke/reports -type f -name '*.rpt'
 ~~~sh
 qm guest exec 152 -- /usr/bin/find /home/cpansmoke/reports -type f -name '*.rpt' -print
 ~~~
+
+### 自動レポート生成を確認（2026-11-22）
+
+VM 152 で固定 `list` を外した Smoker が `Mogura-0.01 [1/44947]`、続いて `SNMP-Info-3.985003 [2/44947]` を自動選択しました。ローカル File transport の `/home/cpansmoke/reports/` に**新しく生成されたレポート**を確認しました。
+
+出力末尾20件の例：**PASS 19件・FAIL 1件**。その中には次が含まれています。
+
+- `fail.Mogura-0.01.*.rpt`
+- `pass.DBD-SQLite-1.78.*.rpt`
+- `pass.Mojolicious-9.54.*.rpt`
+- `pass.Module-Build-0.4234.*.rpt`
+
+依存モジュールのテストも実施・記録されています。**FAIL はテスター本体の異常を意味しません**。失敗原因の判断にはレポート本文が必要です。また「PASS 19 / FAIL 1」は**表示された末尾20ファイルの内訳**であり、累積件数ではありません。
+
+**確認済み：** CPAN の対象自動選択、ビルド／テスト、PASS/FAIL のローカルレポート保存、サービス稼働、`cpansmoker_enable=YES` 設定。
+
+**未確認：** VM 再起動後の自動復帰、長期安定稼働、VM 151 経由での CPAN Testers への外部送信。テスト環境は File transport を継続します。
