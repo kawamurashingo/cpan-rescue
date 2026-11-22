@@ -1,6 +1,6 @@
 # Become a CPAN Tester on FreeBSD / Proxmox
 
-**[日本語ガイド](README.ja.md)** | [Architecture](ARCHITECTURE.md) | [Operations](OPERATIONS.md)
+**[日本語ガイド](README.ja.md)** | **[Activate existing VM 152](ACTIVATE-EXISTING.md)** | [Architecture](ARCHITECTURE.md) | [Operations](OPERATIONS.md)
 
 A reproducible path from a dedicated **FreeBSD 15.1 / Perl 5.42** virtual machine to local CPAN test reports and, optionally, public CPAN Testers submissions. Based on a working Proxmox-hosted reference environment. **Proxmox is optional.**
 

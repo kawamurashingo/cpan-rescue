@@ -1,0 +1,101 @@
+# 既存の FreeBSD VM 152 で自動スモークテストを有効化する
+
+[テスター構築ガイド](README.ja.md) | [English](ACTIVATE-EXISTING.md)
+
+**前提**：VM 152 では cpansmoke ユーザー、CPAN::Reporter::Smoker、File transport、rc.d サービス、daemon による監視がすでに導入済み。rc.d の onestart/onestop/onestatus/onerestart は既存環境で成功しています。
+
+**変更するのは、runner の「固定 list の解除」と OS 起動時の有効化のみ。** VM 151 の送信環境、レポート履歴、Metabase 設定、Perl のパッケージを変更しません。
+
+この手順は **Proxmox ホスト（root@pve）上**で実行します。QEMU Guest Agent が VM 152 で使用できることが前提です。
+
+## 1. Runner を安全に更新し、手動起動で確認
+
+この更新コマンドは、既存 runner を **.preauto** として初回だけバックアップし、公開済みの**固定コミット**から runner だけを取得します。rc.d スクリプトは書き換えません。サービスが動作中なら先に停止します。URL は常に固定コミットを指し、後日更新される main とは独立です。
+
+~~~sh
+qm guest exec 152 -- /bin/sh -c '
+  set -eu
+  runner=/usr/local/libexec/cpansmoker-run
+  tmp=$(/usr/bin/mktemp /tmp/cpansmoker-run.XXXXXX)
+
+  /usr/bin/fetch -q -o "$tmp" \
+    https://raw.githubusercontent.com/kawamurashingo/cpan-rescue/a1d9d6386085349601c9b7f11afc18d8f37b94b9/docs/cpan-testers/scripts/cpansmoker-run
+
+  /bin/sh -n "$tmp"
+  /usr/bin/grep -Fq "unset PERL_CR_SMOKER_SHORTCUT" "$tmp"
+  /usr/bin/grep -Fq "unset PERL_CR_SMOKER_RUNONCE" "$tmp"
+  /usr/bin/grep -Fq "start(install => 0, set_term_title => 0)" "$tmp"
+
+  /usr/bin/test -f "$runner"
+  /usr/bin/test -f /usr/local/etc/rc.d/cpansmoker
+
+  if /usr/sbin/service cpansmoker onestatus >/dev/null 2>&1; then
+    /usr/sbin/service cpansmoker onestop
+  fi
+  if /usr/sbin/service cpansmoker onestatus >/dev/null 2>&1; then
+    echo "ERROR: service still running; not replacing runner"
+    exit 1
+  fi
+
+  if [ ! -e "$runner.preauto" ]; then
+    /bin/cp -p "$runner" "$runner.preauto"
+  fi
+
+  /usr/bin/install -o root -g wheel -m 0555 "$tmp" "$runner"
+  /bin/rm -f "$tmp"
+
+  /usr/sbin/service cpansmoker onestart
+  /usr/sbin/service cpansmoker onestatus
+'
+~~~
+
+**このコマンドは実際に無制限の対象リストでテストを開始します。** 専用 VM と空き容量を確認してから実行してください。既存の File transport なら外部送信には切り替わりません。
+
+ログ：
+
+~~~sh
+qm guest exec 152 -- /usr/bin/tail -n 80 /home/cpansmoke/logs/cpansmoker.log
+qm guest exec 152 -- /usr/bin/find /home/cpansmoke/reports -type f -name '*.rpt' -print
+~~~
+
+成功判定は「サービスが起動する」だけではなく、ログに **Starting CPAN::Reporter::Smoker**、固定 list 以外の対象への処理、レポート生成や履歴の変化が確認できることです。最初の CPAN インデックス走査には時間がかかります。
+
+## 2. 起動時に自動実行
+
+**手動起動とログを確認できた後**、次の1行を Proxmox から実行します。
+
+~~~sh
+qm guest exec 152 -- /usr/sbin/sysrc cpansmoker_enable=YES
+~~~
+
+これで FreeBSD の次回起動時に **service cpansmoker start** が呼ばれます。**現在のサービスを start する操作ではありません**（上記 onestart で起動済み）。
+
+状態を確認：
+
+~~~sh
+qm guest exec 152 -- /usr/sbin/service cpansmoker onestatus
+qm guest exec 152 -- /usr/sbin/sysrc cpansmoker_enable
+~~~
+
+## 停止・切り戻し
+
+~~~sh
+qm guest exec 152 -- /usr/sbin/service cpansmoker onestop
+qm guest exec 152 -- /usr/sbin/sysrc cpansmoker_enable=NO
+~~~
+
+旧 runner に戻す場合（上記で停止した後）：
+
+~~~sh
+qm guest exec 152 -- /bin/sh -c '
+  set -eu
+  r=/usr/local/libexec/cpansmoker-run
+  /usr/bin/test -f "$r.preauto"
+  /bin/cp -p "$r.preauto" "$r"
+  /bin/sh -n "$r"
+'
+~~~
+
+これで**自動的な CPAN のテスト開始・継続**が対象です。**VM 151 へのファイル転送・CPAN Testers への自動投稿は別工程**で、この手順には含みません。
+
+注意：**qm guest exec の exitcode 0 は起動コマンドの成功であり、すべての CPAN ディストリビューションのテスト成功を意味しません。** ログと .rpt の生成結果を確認してください。

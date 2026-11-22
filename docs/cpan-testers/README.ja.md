@@ -1,6 +1,6 @@
 # FreeBSD / Proxmox から CPAN Tester になる
 
-[English](README.md) | [設計](ARCHITECTURE.md) | [運用・トラブル対応](OPERATIONS.md)
+[English](README.md) | **[既存 VM 152 の自動化手順](ACTIVATE-EXISTING.ja.md)** | [設計](ARCHITECTURE.md) | [運用・トラブル対応](OPERATIONS.md)
 
 これは実際に構築した **Proxmox VE + FreeBSD 15.1 + Perl 5.42.3 + CPAN::Reporter::Smoker** 環境を、第三者が再現できるようにまとめたガイドです。**まずローカルにテストレポートを生成し、その後に本人の判断で CPAN Testers への投稿へ進みます。** Proxmox は任意で、FreeBSD VM 単独でも手順を始められます。
 
