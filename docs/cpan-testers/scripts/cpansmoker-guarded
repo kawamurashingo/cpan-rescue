@@ -1,0 +1,99 @@
+#!/bin/sh
+#
+# PROVIDE: cpansmoker
+# REQUIRE: NETWORKING LOGIN
+# KEYWORD: shutdown
+#
+# Optional FreeBSD rc.d candidate for an isolated CPAN smoke-test VM.
+# Untested on the original VM: validate under a maintenance window.
+
+. /etc/rc.subr
+
+name="cpansmoker"
+rcvar="cpansmoker_enable"
+
+load_rc_config "$name"
+: "${cpansmoker_enable:=NO}"
+: "${cpansmoker_stop_timeout:=90}"
+
+pidfile="/home/cpansmoke/logs/cpansmoker.pid"
+procname="/usr/sbin/daemon"
+command="/usr/local/bin/sudo"
+command_args="-n -H -u cpansmoke /usr/sbin/daemon -f -H -R 60 -P ${pidfile} -o /home/cpansmoke/logs/cpansmoker.log /usr/local/libexec/cpansmoker-run"
+
+start_precmd="cpansmoker_prestart"
+stop_cmd="cpansmoker_stop"
+restart_cmd="cpansmoker_restart"
+
+# This account must be dedicated to smoke-testing. Fail closed if any of its
+# processes remain, even after daemon has dropped its supervisor pidfile.
+cpansmoker_has_processes()
+{
+    /usr/bin/pgrep -u cpansmoke -f '.' >/dev/null 2>&1
+}
+
+cpansmoker_prestart()
+{
+    if cpansmoker_has_processes; then
+        echo "cpansmoker: refusing start: cpansmoke processes still exist" >&2
+        /usr/bin/pgrep -l -u cpansmoke -f '.' >&2 || :
+        return 1
+    fi
+    return 0
+}
+
+cpansmoker_stop()
+{
+    # rc.subr can omit rc_pid during parts of the boot/shutdown path.
+    active_pid=${rc_pid:-$(check_pidfile "$pidfile" "$procname")}
+    if [ -z "$active_pid" ]; then
+        if cpansmoker_has_processes; then
+            echo "cpansmoker: supervisor absent but cpansmoke processes remain" >&2
+            return 1
+        fi
+        echo "cpansmoker: already stopped"
+        return 0
+    fi
+
+    case "$cpansmoker_stop_timeout" in
+        ''|*[!0-9]*)
+            echo "cpansmoker: invalid stop timeout: $cpansmoker_stop_timeout" >&2
+            return 1
+            ;;
+    esac
+    if [ "$cpansmoker_stop_timeout" -eq 0 ]; then
+        echo "cpansmoker: stop timeout must be positive" >&2
+        return 1
+    fi
+
+    echo "Stopping cpansmoker supervisor PID $active_pid (max ${cpansmoker_stop_timeout}s)"
+    /bin/kill -TERM "$active_pid" || return 1
+
+    remaining=$cpansmoker_stop_timeout
+    while [ "$remaining" -gt 0 ]; do
+        if [ -z "$(check_pidfile "$pidfile" "$procname")" ]; then
+            if cpansmoker_has_processes; then
+                echo "cpansmoker: supervisor stopped, but cpansmoke jobs remain; not safe to start" >&2
+                /usr/bin/pgrep -l -u cpansmoke -f '.' >&2 || :
+                return 1
+            fi
+            echo "cpansmoker: stopped"
+            return 0
+        fi
+        /bin/sleep 1
+        remaining=$((remaining - 1))
+    done
+
+    echo "cpansmoker: timeout; supervisor or children may still be running. No SIGKILL sent." >&2
+    return 1
+}
+
+# FreeBSD rc.subr's default restart calls start even if stop fails.
+# We explicitly refuse that behavior here.
+cpansmoker_restart()
+{
+    cpansmoker_stop || return 1
+    /usr/sbin/service cpansmoker onestart
+}
+
+run_rc_command "$1"
