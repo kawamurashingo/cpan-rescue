@@ -54,7 +54,7 @@ VM 152 に候補 rc.d を適用して `service cpansmoker onestop` を試した�
 
 90秒タイムアウト後、`ps` で supervisor **23755** が `piperd`（パイプ読み込み待ち）になっており、Smoker 本体 **23756** は終了、Attean の CPAN 処理 **23806** は孤立して PPID=1 となっていることを確認。
 
-`fstat` により、supervisor **23755** の FD 7（pipe `ffffffe00511ed5c0` ↔ `ffffffe00511ed718`）と Attean **23806** の FD 1/2/4 が、**同じパイプの両端を保持している**ことを確認した。このため、子孫テストがログ用パイプを保持し続け、supervisor の終了を妨げていたと説明できる。
+`fstat` により、supervisor **23755** の FD 7（同一のカーネルパイプの両端）と Attean **23806** の FD 1/2/4 が、**同じパイプの両端を保持している**ことを確認した。このため、子孫テストがログ用パイプを保持し続け、supervisor の終了を妨げていたと説明できる。
 
 孤立した Attean PID **23806** に対し、PPID・実行ユーザー・コマンドを照合した後に **SIGTERM のみ**送った。続く確認では supervisor PID **23755**、Smoker PID **23756**、Attean PID **23806** がすべて消え、`ps -U cpansmoke` も空、`service cpansmoker onestatus` は `not running` を返した。
 
