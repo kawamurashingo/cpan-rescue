@@ -21,8 +21,8 @@ qm guest exec 152 -- /bin/sh -c '
   /usr/bin/grep -Fq "unset PERL_CR_SMOKER_SHORTCUT" "$tmp"
   /usr/bin/grep -Fq "unset PERL_CR_SMOKER_RUNONCE" "$tmp"
   /usr/bin/grep -Fq "start(install => 0, set_term_title => 0)" "$tmp"
-  /usr/bin/test -f "$runner"
-  /usr/bin/test -f /usr/local/etc/rc.d/cpansmoker
+  test -f "$runner"
+  test -f /usr/local/etc/rc.d/cpansmoker
   if /usr/sbin/service cpansmoker onestatus >/dev/null 2>&1; then
     /usr/sbin/service cpansmoker onestop
   fi
@@ -63,7 +63,7 @@ qm guest exec 152 -- /usr/sbin/sysrc cpansmoker_enable=NO
 qm guest exec 152 -- /bin/sh -c '
   set -eu
   r=/usr/local/libexec/cpansmoker-run
-  /usr/bin/test -f "$r.preauto"
+  test -f "$r.preauto"
   /bin/cp -p "$r.preauto" "$r"
   /bin/sh -n "$r"
 '
