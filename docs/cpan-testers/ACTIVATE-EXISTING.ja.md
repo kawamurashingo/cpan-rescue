@@ -162,3 +162,18 @@ VM 152 の自動巡回とローカル PASS/FAIL/UNKNOWN レポート生成は確
 **稼働中の daemon に -H は後から反映できません。** 現在の VM で rc.d の実ファイルと既存 newsyslog 設定を読み取って確認してから、メンテナンス時に一度だけ Smoker を停止・起動します。**-H のない daemon のまま newsyslog を有効化しないでください**（ローテーション後も元ファイルを掴む可能性）。停止中のテストは中断され得ます。
 
 設定と安全な検証の順番は [OPERATIONS.md](OPERATIONS.md#log-rotation-for-continuous-cpan-smoke-testing) を参照。続いて再起動後の自動復帰試験を行います。
+
+### ログローテーションの実動作確認（2026-11-22）
+
+FreeBSD VM 152 の既存 rc.d に `/usr/sbin/daemon -f -H -R 60` を設定し、Smoker を再起動。監視デーモン **PID 23755**、Smoker 本体 **PID 23756** が稼働し、CPAN インデックスの走査を再開しました。
+
+`/usr/local/etc/newsyslog.conf.d/cpansmoker.conf` を読み込む dry-run が成功した後、対象を `/home/cpansmoke/logs/cpansmoker.log` のみに限定して `newsyslog -F -P -v` を実行しました。
+
+**観測結果：**
+
+- 旧ログは `cpansmoker.log.0` に保存（約 5.8 MB）。
+- 新ログは `cpansmoker.log` として作成（確認時点で 8.6 KB）。
+- newsyslog は監視デーモン PID **23755** に SIGHUP を通知。
+- ローテーション後も `service cpansmoker onestatus` は **PID 23755 で稼働中**を返した。
+
+以上により、**サービスを停止しないログローテーション**を実証しました。新しいログがその後も継続して伸びるか、次回の定期 newsyslog 実行、FreeBSD VM 再起動後の自動復帰は別途確認事項です。外部 CPAN Testers への投稿は File transport のローカル保存とは別工程です。

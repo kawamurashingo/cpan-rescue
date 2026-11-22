@@ -127,3 +127,16 @@ This counts **local report files**, not completed tests across all CPAN or submi
 XS builds can increase the log quickly. The [reference rc.d template](scripts/cpansmoker) now includes **daemon -H**, and a [newsyslog config example](newsyslog.conf.d/cpansmoker.conf) rotates above **10 MiB**, retaining **7 archives**. Archive retention does not apply to reports.
 
 **Do not activate newsyslog rotation on the existing VM before verifying and updating its *actual* rc.d launch command and doing a controlled restart**: a running supervisor without **-H** will not reopen the log when SIGHUP is sent. See [OPERATIONS.md](OPERATIONS.md#log-rotation-for-continuous-cpan-smoke-testing) for the non-invasive inspection and activation sequence. A VM reboot test follows during an approved maintenance window.
+
+### Live log rotation verified (2026-11-22)
+
+On FreeBSD VM 152 the installed rc.d was updated to launch `/usr/sbin/daemon -f -H -R 60`, then Smoker was restarted. The supervisor ran as PID **23755**, with Smoker child PID **23756**, and resumed CPAN index scanning.
+
+The newsyslog configuration in `/usr/local/etc/newsyslog.conf.d/cpansmoker.conf` passed dry-run validation. A forced, single-log `newsyslog -F -P -v` run showed:
+
+- An approximately **5.8 MB** archived `cpansmoker.log.0`;
+- A new `cpansmoker.log` with **8.6 KB** at observation time;
+- SIGHUP notification to supervisor PID **23755**;
+- `service cpansmoker onestatus` still reporting **PID 23755** afterward.
+
+This verifies a **non-disruptive manual rotation** with the service remaining active. Continued output growth, a subsequent automatically scheduled rotation, and recovery after a FreeBSD VM reboot are separate checks. Local File transport does not constitute public CPAN Testers submission.
