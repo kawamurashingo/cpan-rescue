@@ -142,3 +142,15 @@ The report was parsed with Test::Reporter as `DBI-1.656`, `pass`, subject `PASS 
 VM 151 has `/usr/bin/su` but **no `/usr/local/bin/sudo`**. The attempted preflight requiring sudo exited 1 **before submission**; there was no external send attempt in that step. The actual send invoked the **existing** sender using `qm guest exec 151 -- /usr/bin/su -m cpansend -c 'HOME=/home/cpansend /usr/local/bin/perl /home/cpansend/send-batch.pl'` with preflight checks. The script returned **exit code 0**, printed `Sending: PASS DBI-1.656 ...` and `SENT: pass.DBI-1.656....rpt`.
 
 **Verified:** one end-to-end report transfer and successful sender return. **Not yet verified:** post-send queue counts, public CPAN Testers ingestion/display, unattended periodic transfer, auto-submission, failure recovery, and policy for FAIL/UNKNOWN grades. Do not interpret `SENT` as proof of public visibility or automatically resend uncertain `inflight` records.
+
+## Post-send DBI queue verification (2026-11-22)
+
+Following the successful `DBI-1.656` Metabase send via the existing `send-batch.pl`, a **read-only queue count** on VM 151 confirmed:
+
+- `incoming/*.rpt`: **0**
+- `inflight/*.rpt`: **0**
+- `sent/*.rpt`: **20** (previously 19)
+
+Thus the submitted DBI report left `incoming`, did not remain in `inflight`, and was filed under `sent`. The sender returned exit code 0 and printed `SENT`. This verifies **one complete transfer-and-send workflow**, not unattended scheduling or public CPAN Testers visibility.
+
+**Operational next step:** automate only the *staging/transfer* phase first with bounded 1,024-byte guest-exec stdin chunks, SHA-256 validation, and report-level deduplication; enable unattended submission only after failure handling is tested. Preserve existing `sent` reports and the `hold` subtree.
