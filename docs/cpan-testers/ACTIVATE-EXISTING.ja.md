@@ -154,3 +154,11 @@ VM 152 の `/home/cpansmoke/reports` を再帰的に数えた結果：**PASS 33 
 これは**ローカルに保存されているファイルの件数**であり、全 CPAN のテスト完了数や外部送信数ではありません。FAIL/UNKNOWN の原因は必要に応じて各 .rpt の内容で調べます。
 
 VM 152 の自動巡回とローカル PASS/FAIL/UNKNOWN レポート生成は確認済み。**VM 再起動後の自動復帰・長期運転・VM 151 を使った自動投稿は未検証**です。
+
+### 次の運用改善：ログローテーション（停止前の事前確認）
+
+テストの C/XS コンパイルでログが短時間に増えるため、FreeBSD 標準の **newsyslog** を使います。公開した [rc.d の参考実装](scripts/cpansmoker) には、SIGHUP で出力ログを開き直す **daemon -H** を追加しました。[newsyslog 設定例](newsyslog.conf.d/cpansmoker.conf) は **10 MiB 超で最大7世代**・所有者 cpansmoke・600 権限です。**newsyslog の定期実行間隔（通常1時間）ごとに判定**され、厳密な 10 MiB 上限ではありません。保存済み **.rpt** は対象外です。
+
+**稼働中の daemon に -H は後から反映できません。** 現在の VM で rc.d の実ファイルと既存 newsyslog 設定を読み取って確認してから、メンテナンス時に一度だけ Smoker を停止・起動します。**-H のない daemon のまま newsyslog を有効化しないでください**（ローテーション後も元ファイルを掴む可能性）。停止中のテストは中断され得ます。
+
+設定と安全な検証の順番は [OPERATIONS.md](OPERATIONS.md#log-rotation-for-continuous-cpan-smoke-testing) を参照。続いて再起動後の自動復帰試験を行います。

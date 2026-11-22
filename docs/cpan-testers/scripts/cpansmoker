@@ -14,6 +14,6 @@ load_rc_config "$name"
 pidfile="/home/cpansmoke/logs/cpansmoker.pid"
 procname="/usr/sbin/daemon"
 command="/usr/local/bin/sudo"
-command_args="-n -H -u cpansmoke /usr/sbin/daemon -f -R 60 -P $pidfile -o /home/cpansmoke/logs/cpansmoker.log /usr/local/libexec/cpansmoker-run"
+command_args="-n -H -u cpansmoke /usr/sbin/daemon -f -H -R 60 -P $pidfile -o /home/cpansmoke/logs/cpansmoker.log /usr/local/libexec/cpansmoker-run"
 
 run_rc_command "$1"

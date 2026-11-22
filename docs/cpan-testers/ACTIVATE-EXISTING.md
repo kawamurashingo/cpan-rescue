@@ -121,3 +121,9 @@ Dependency distributions were tested as well. **A FAIL report is not itself a sm
 A recursive count of `/home/cpansmoke/reports` on VM 152 found **33 PASS / 1 FAIL / 2 UNKNOWN / 0 NA = 36 local report files**. The service was running as PID 3664. Root filesystem: **3.3 GB used of 57 GB (6%), 49 GB free**.
 
 This counts **local report files**, not completed tests across all CPAN or submissions received by CPAN Testers. Individual FAIL/UNKNOWN causes must be investigated from report contents. Automatic CPAN selection and local report generation are observed; **reboot recovery, extended stability, and VM 151 submission automation remain unverified**.
+
+### Next operational improvement: safe log rotation
+
+XS builds can increase the log quickly. The [reference rc.d template](scripts/cpansmoker) now includes **daemon -H**, and a [newsyslog config example](newsyslog.conf.d/cpansmoker.conf) rotates above **10 MiB**, retaining **7 archives**. Archive retention does not apply to reports.
+
+**Do not activate newsyslog rotation on the existing VM before verifying and updating its *actual* rc.d launch command and doing a controlled restart**: a running supervisor without **-H** will not reopen the log when SIGHUP is sent. See [OPERATIONS.md](OPERATIONS.md#log-rotation-for-continuous-cpan-smoke-testing) for the non-invasive inspection and activation sequence. A VM reboot test follows during an approved maintenance window.
