@@ -115,3 +115,9 @@ Dependency distributions were tested as well. **A FAIL report is not itself a sm
 **Verified:** automatic CPAN target selection, build/test activity, local PASS and FAIL report generation, running service, and `cpansmoker_enable=YES` configuration.
 
 **Not yet verified:** VM-reboot auto-recovery, long-term stability, or submission to public CPAN Testers through VM 151. The test VM retains File transport.
+
+### Report count (2026-11-22, observed snapshot)
+
+A recursive count of `/home/cpansmoke/reports` on VM 152 found **33 PASS / 1 FAIL / 2 UNKNOWN / 0 NA = 36 local report files**. The service was running as PID 3664. Root filesystem: **3.3 GB used of 57 GB (6%), 49 GB free**.
+
+This counts **local report files**, not completed tests across all CPAN or submissions received by CPAN Testers. Individual FAIL/UNKNOWN causes must be investigated from report contents. Automatic CPAN selection and local report generation are observed; **reboot recovery, extended stability, and VM 151 submission automation remain unverified**.
