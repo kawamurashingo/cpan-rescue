@@ -1,5 +1,7 @@
 # 既存の FreeBSD VM 152 で自動スモークテストを有効化する
 
+**最新状態（2026-11-22）：** [次回の作業引き継ぎはこちら](HANDOFF-2026-11-22.ja.md)。このページは構築手順と当時の検証履歴です。VM 152 の OS 自動復帰と DBI レポート1件の VM 151 からの送信は、その後実証済みです。
+
 [テスター構築ガイド](README.ja.md) | [English](ACTIVATE-EXISTING.md)
 
 **前提**：VM 152 では cpansmoke ユーザー、CPAN::Reporter::Smoker、File transport、rc.d サービス、daemon による監視がすでに導入済み。rc.d の onestart/onestop/onestatus/onerestart は既存環境で成功しています。

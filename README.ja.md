@@ -2,6 +2,8 @@
 
 [English](README.md) | **日本語**
 
+**CPAN Testers 実機作業の続きはこちら：** [**2026-11-22 最新の引き継ぎ・次回の開始手順**](docs/cpan-testers/HANDOFF-2026-11-22.ja.md)。
+
 **CPAN Testers に参加してみたい方へ：** [FreeBSD / Proxmox でテスターになる手順 →](docs/cpan-testers/README.ja.md)。
 
 **CPAN Rescue は、実際のソフトウェアをメンテナンスすることで、メンテナを育てるプロジェクトです。**

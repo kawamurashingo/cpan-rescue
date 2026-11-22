@@ -4,6 +4,8 @@
 
 🌐 **Website:** https://cpan-rescue.com
 
+**Infrastructure status:** [**Latest session handoff / how to resume (2026-11-22)**](docs/cpan-testers/HANDOFF-2026-11-22.md) · [日本語](docs/cpan-testers/HANDOFF-2026-11-22.ja.md).
+
 **Want to contribute test reports?** [Become a CPAN Tester on FreeBSD / Proxmox →](docs/cpan-testers/README.md).
 
 **CPAN Rescue grows maintainers by maintaining real software.**

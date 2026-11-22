@@ -1,5 +1,7 @@
 # Activate automatic CPAN smoke testing on the existing FreeBSD VM 152
 
+**Current state (2026-11-22):** [Latest session handoff](HANDOFF-2026-11-22.md). The steps below are historical; VM 152 boot recovery and one DBI report submission through VM 151 were subsequently verified.
+
 [Full guide](README.md) | [日本語](ACTIVATE-EXISTING.ja.md)
 
 **Scope:** The reference FreeBSD 15.1 VM already has a working cpansmoke user, CPAN::Reporter::Smoker, File transport, rc.d service, and daemon supervision. Only two things remain: replace the fixed one-distribution runner with an all-CPAN runner, and enable boot startup. **Do not install more packages, alter reports, or configure public submissions.**

@@ -2,7 +2,7 @@
 
 [日本語](SAFE-STOP.ja.md) · [Full guide](README.md)
 
-**Status: candidate, static shell syntax checked; not yet validated on the live VM.** The proven production VM 152 currently runs the original rc.d script. Do not overwrite it while assuming this candidate is already proven.
+**Status as of 2026-11-22: installed on VM 152.** The 90-second bounded stop timeout and single-instance startup after manual orphan cleanup were verified, but fully automatic graceful termination of orphaned descendants remains unresolved. [Read the current handoff](HANDOFF-2026-11-22.md) before following the historical upgrade steps below.
 
 The original FreeBSD `rc.subr` stop invokes `wait_for_pids` after SIGTERM and may wait indefinitely when a supervised Perl/CPAN test tree is still active. Its default restart also runs start after stop without checking the first return code. The candidate [cpansmoker-guarded](scripts/cpansmoker-guarded) changes those behaviors. Source: [FreeBSD rc.subr](https://cgit.freebsd.org/src/tree/libexec/rc/rc.subr).
 

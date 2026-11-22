@@ -1,5 +1,7 @@
 # FreeBSD smoker operations / troubleshooting
 
+**2026-11-22 最新の引き継ぎ / operational snapshot:** [日本語](HANDOFF-2026-11-22.ja.md) · [English](HANDOFF-2026-11-22.md). This file retains chronological findings; earlier statements marked *unverified* were superseded by later tests. Guest Agent bulk transfers are currently unreliable.
+
 [Start (English)](README.md) | [日本語](README.ja.md)
 
 ## Read-only checks
@@ -123,7 +125,7 @@ The last command is a **dry run**, not a rotation. Run commands as FreeBSD root 
 
 ## Bounded stop / preventing a second smoker
 
-The original service used rc.subr's default **stop**, which could wait for a long-running test. An **experimental, fail-closed** rc.d candidate and its upgrade/rollback steps are documented in [SAFE-STOP.md](SAFE-STOP.md) ([日本語](SAFE-STOP.ja.md)). It adds a 90-second bound and refuses a restart while any processes owned by the dedicated cpansmoke user remain. It does **not** automatically SIGKILL tests and has **not yet been tested on the original VM**. Do not treat it as a proven replacement until validated during a maintenance window.
+The original service used rc.subr's default **stop**, which could wait for a long-running test. An **experimental, fail-closed** rc.d candidate and its upgrade/rollback steps are documented in [SAFE-STOP.md](SAFE-STOP.md) ([日本語](SAFE-STOP.ja.md)). It adds a 90-second bound and refuses a restart while any processes owned by the dedicated cpansmoke user remain. It does **not** automatically SIGKILL tests. **On VM 152, the 90-second timeout and a later single-instance recovery were verified; complete graceful standalone stop was not.** See the [latest handoff](HANDOFF-2026-11-22.md) before any maintenance.
 
 ## QEMU Guest Agent cross-VM copy proof (2026-11-22)
 
