@@ -148,3 +148,16 @@ The new `cpansmoker.log` grew from approximately **8.6 KB** immediately after ro
 This confirms the active Smoker **continued writing into the new log and running tests after live rotation**.
 
 **Remaining:** recovery after an actual VM reboot, multi-day operation, and submitting via VM 151. A prior rc.d stop request waited for a prolonged time during active dependency tests; plan a maintenance window and inspect active tests before rebooting.
+
+## VM boot recovery verified (2026-11-22)
+
+On the Proxmox host, `qm shutdown 152 --timeout 240 --forceStop 0` completed and `qm status 152` reported `status: stopped`. After VM 152 was started again, **without any manual `service cpansmoker onestart`**, the FreeBSD guest reported:
+
+- `service cpansmoker onestatus`: `cpansmoker is running as pid 1396.`
+- `sysrc cpansmoker_enable`: `cpansmoker_enable: YES`
+- CPAN::Reporter::Smoker worker PID **1397**, parent supervisor PID **1396**
+- New `t/xs/*.t` test output in `cpansmoker.log`
+
+**Verified:** normal VM shutdown followed by automatic boot-time Smoker startup and resumed tests.
+
+**Still open:** a standalone rc.d stop can leave an orphaned CPAN descendant retaining the log pipe, so successful VM shutdown does not prove graceful standalone rc.d stop. The VM 151 forwarding/public submission workflow has not yet been verified.
