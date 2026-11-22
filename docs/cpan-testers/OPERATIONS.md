@@ -124,3 +124,11 @@ The last command is a **dry run**, not a rotation. Run commands as FreeBSD root 
 ## Bounded stop / preventing a second smoker
 
 The original service used rc.subr's default **stop**, which could wait for a long-running test. An **experimental, fail-closed** rc.d candidate and its upgrade/rollback steps are documented in [SAFE-STOP.md](SAFE-STOP.md) ([日本語](SAFE-STOP.ja.md)). It adds a 90-second bound and refuses a restart while any processes owned by the dedicated cpansmoke user remain. It does **not** automatically SIGKILL tests and has **not yet been tested on the original VM**. Do not treat it as a proven replacement until validated during a maintenance window.
+
+## QEMU Guest Agent cross-VM copy proof (2026-11-22)
+
+VM 152 and VM 151 reside on separate Proxmox bridges (`vmbr2` / `vmbr1`). The host has routes to both guests but TCP/22 probes from the host to both guests failed; direct VM 151 → VM 152 SSH was also unreachable. Do **not** relax isolation solely for report transfer.
+
+An end-to-end test succeeded using Proxmox's `pvesh` QEMU Guest Agent file APIs: `/nodes/<node>/qemu/152/agent/file-read` read VM 152's harmless `/etc/shells`; the host transferred Base64-encoded content to `/nodes/<node>/qemu/151/agent/file-write` with `--encode 0`; a readback from VM 151 was byte-for-byte equal (Base64 values matched). Output: `SUCCESS: VM 152 -> Proxmox -> VM 151`, `Content verified`. The temporary test file was removed.
+
+**Scope of proof:** small text-file delivery between guest temporary locations, **not** a tested production report mover. Before handling real `.rpt` files, check QGA file-read size/truncation, copy to a staging path, compare hashes/lengths, exclude VM 152 `reports/hold`, avoid duplicates against VM 151 `sent` by report identity (not filename only), and use `incoming` only after complete validation. A successful transfer must not trigger public submission automatically. Preserve the 19 existing `sent` reports, and do not retry `inflight` without manual disposition.
