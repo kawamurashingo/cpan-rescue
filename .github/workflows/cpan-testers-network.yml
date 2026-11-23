@@ -24,6 +24,7 @@ jobs:
         run: |
           perl -c docs/cpan-testers/scripts/prepare-host-ssh.pl
           prove -v docs/cpan-testers/tests/*.t
+          sh -n docs/cpan-testers/scripts/persist-host-ssh.sh
           bash -n docs/cpan-testers/tests/host-ssh-network.sh
       - name: Install namespace test tools
         run: |

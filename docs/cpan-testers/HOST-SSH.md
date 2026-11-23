@@ -59,7 +59,21 @@ timeout 12 qm guest exec 152 -- /usr/bin/nc -n -z -v -w 3 10.151.0.2 22
 
 Check `exited=1`, the **guest** `exitcode` and diagnostic output, not only the `qm` exit status. Missing `nc`, Guest Agent timeouts and PID-only replies do not prove isolation. Stop sending further Guest Agent commands if responsiveness becomes uncertain.
 
-After reviewing backups, diffs and both positive/negative probes, install the candidates:
+After positive and negative probes succeed, the [persistence installer](scripts/persist-host-ssh.sh) can generate fresh candidates from a known pre-change backup, check both complete files, retain new backups, and install them. Keep it beside `prepare-host-ssh.pl`. For the documented real-host backup, run from the repository root:
+
+~~~sh
+# Prepare and validate only; configuration files are unchanged.
+sh docs/cpan-testers/scripts/persist-host-ssh.sh \
+  --baseline-dir /root/cpan-host-ssh.nTH490
+
+# Revalidate both files and install.
+sh docs/cpan-testers/scripts/persist-host-ssh.sh \
+  --baseline-dir /root/cpan-host-ssh.nTH490 --apply
+~~~
+
+Each current file must exactly match either its original baseline or the candidate derived from it. Unrelated edits are refused; already installed and partially installed states are supported. The installer takes an exclusive lock, runs bounded `nft --check` calls only, rechecks originals before replacement, and retains backups/candidates in the printed `/root/cpan-host-ssh-persist.*` directory. It does not reload live rules. Each file is replaced by a separate rename; use the retained backups to reconcile a partial I/O failure. `PERSISTENCE_FILES_VERIFIED` is printed only after both installed files match their candidates; it does not prove reboot recovery.
+
+Alternatively, after reviewing backups, diffs and both positive/negative probes, install the previously prepared candidates manually:
 
 ~~~sh
 mv /root/cpan151.nft.host-ssh.next /root/cpan151.nft

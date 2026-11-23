@@ -90,6 +90,26 @@ timeout 12 qm guest exec 152 -- /usr/bin/nc -n -z -v -w 3 10.151.0.2 22
 
 専用の `cpan151-network.service` / `cpan152-network.service` は、それぞれ `/usr/local/sbin/cpan151-network-up` / `/usr/local/sbin/cpan152-network-up` から `/root/cpan151.nft` / `/root/cpan152.nft` を初期ロードする。**テーブルが既にある場合は再ロードを省略する**実装なので、サービス再起動で規則を更新しようとしない。
 
+### 既知のバックアップと照合して更新する
+
+[永続化スクリプト](scripts/persist-host-ssh.sh) は、既知の変更前バックアップから候補を新規生成し、両方の元ファイルを確認してから置換する。2026-11-23 の実機ではバックアップが `/root/cpan-host-ssh.nTH490/` にある。`prepare-host-ssh.pl` と同じディレクトリに置き、本リポジトリのルートから実行する。
+
+~~~sh
+# 候補・差分・構文の確認だけ（元ファイルは変更しない）
+sh docs/cpan-testers/scripts/persist-host-ssh.sh \
+  --baseline-dir /root/cpan-host-ssh.nTH490
+
+# 同じ検査を行い、両方が成功した場合に元ファイルを置換する
+sh docs/cpan-testers/scripts/persist-host-ssh.sh \
+  --baseline-dir /root/cpan-host-ssh.nTH490 --apply
+~~~
+
+現在の各ファイルが、変更前バックアップか、そこから生成した候補とバイト単位で一致することを要求する。別の編集があれば上書きしない。既に候補と一致するファイルはそのまま扱うため、片方だけ更新済みの場合や再実行にも対応する。`nft` は時間制限付きの `--check` だけを実行し、稼働中の規則は再ロードしない。
+
+作業・バックアップ先は `/root/cpan-host-ssh-persist.*` として表示する。排他ロックを取り、検査中に元ファイルが変わっていないことを再確認し、ファイルごとに rename で置換する。2ファイルの置換は別々の操作なので、途中の I/O エラーでは表示されたバックアップを使って照合・復旧する。両方の内容を再照合したときだけ `PERSISTENCE_FILES_VERIFIED` を出力する。**この出力は実機再起動後の成功を意味しない。**
+
+### 候補ファイルを手動で置き換える場合
+
 バックアップ・差分・疎通を確認後、同じディレクトリの候補を元ファイルへ置換する。
 
 ~~~sh

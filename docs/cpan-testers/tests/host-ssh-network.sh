@@ -166,19 +166,21 @@ expect_blocked 'tester -> host management' "$tester_ns" 10.152.0.1 8006
 expect_blocked 'sender -> tester SSH' "$sender_ns" 10.152.0.2 22
 expect_blocked 'tester -> sender SSH' "$tester_ns" 10.151.0.2 22
 
-# Check the persistence path: candidates prepared from files recreate the same
-# behavior when the two test tables are removed and rebuilt inside this netns.
+# Exercise the persistence installer against the existing live tables, then
+# recreate those tables from its installed files entirely inside this netns.
 test_tmp=$(mktemp -d)
 trap 'rm -rf -- "$test_tmp"; cleanup' EXIT
+mkdir "$test_tmp/baseline" "$test_tmp/config"
 for id in 151 152; do
-    bridge=vmbr1
-    [ "$id" -eq 151 ] || bridge=vmbr2
     ip netns exec "$host_ns" nft --numeric-priority list table inet "cpan${id}_filter" |
-        sed '/cpan-rescue-host-ssh-/d' > "$test_tmp/$id.nft"
-    perl "$test_dir/../scripts/prepare-host-ssh.pl" --vm-id "$id" \
-        --input "$test_tmp/$id.nft" --output "$test_tmp/$id.next"
+        sed '/cpan-rescue-host-ssh-/d' > "$test_tmp/baseline/cpan$id.nft"
+    cp "$test_tmp/baseline/cpan$id.nft" "$test_tmp/config/cpan$id.nft"
+done
+ip netns exec "$host_ns" sh "$test_dir/../scripts/persist-host-ssh.sh" \
+    --baseline-dir "$test_tmp/baseline" --config-dir "$test_tmp/config" --apply
+for id in 151 152; do
     ip netns exec "$host_ns" nft delete table inet "cpan${id}_filter"
-    ip netns exec "$host_ns" nft --file "$test_tmp/$id.next"
+    ip netns exec "$host_ns" nft --file "$test_tmp/config/cpan$id.nft"
 done
 expect_allowed 'persistent candidate: host -> sender SSH' "$host_ns" 10.151.0.2 22
 expect_allowed 'persistent candidate: host -> tester SSH' "$host_ns" 10.152.0.2 22
