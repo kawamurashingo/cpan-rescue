@@ -1,0 +1,34 @@
+name: CPAN Testers host SSH isolation
+
+on:
+  pull_request:
+    paths:
+      - 'docs/cpan-testers/**'
+      - '.github/workflows/cpan-testers-network.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'docs/cpan-testers/**'
+      - '.github/workflows/cpan-testers-network.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  host-ssh-isolation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare candidate regression checks
+        run: |
+          perl -c docs/cpan-testers/scripts/prepare-host-ssh.pl
+          prove -v docs/cpan-testers/tests/*.t
+          sh -n docs/cpan-testers/scripts/persist-host-ssh.sh
+          bash -n docs/cpan-testers/tests/host-ssh-network.sh
+      - name: Install namespace test tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y nftables iproute2
+      - name: Verify SSH reply access and guest isolation in network namespaces
+        run: sudo bash docs/cpan-testers/tests/host-ssh-network.sh

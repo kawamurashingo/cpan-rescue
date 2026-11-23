@@ -1,0 +1,5 @@
+# Apply once to the existing tables, after `nft --check --file` succeeds.
+# Only replies to host-initiated TCP/22 connections are admitted.
+# Do not flush the ruleset or change the forward chains.
+insert rule inet cpan151_filter input iifname "vmbr1" ip saddr 10.151.0.2 ip daddr 10.151.0.1 tcp sport 22 ct state established ct direction reply counter accept comment "cpan-rescue-host-ssh-151"
+insert rule inet cpan152_filter input iifname "vmbr2" ip saddr 10.152.0.2 ip daddr 10.152.0.1 tcp sport 22 ct state established ct direction reply counter accept comment "cpan-rescue-host-ssh-152"

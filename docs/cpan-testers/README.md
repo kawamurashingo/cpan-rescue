@@ -2,7 +2,7 @@
 
 **[日本語ガイド](README.ja.md)** | **[Activate existing VM 152](ACTIVATE-EXISTING.md)** | [Architecture](ARCHITECTURE.md) | [Operations](OPERATIONS.md)
 
-**Live-reference handoff (2026-11-22):** [Current status, blockers and next commands](HANDOFF-2026-11-22.md) · [日本語・詳細](HANDOFF-2026-11-22.ja.md). Earlier steps below are a reproducible guide, not the latest state of VM 151/152.
+**Live-reference handoff (2026-11-23):** [Current status, blockers and next commands](HANDOFF-2026-11-23.md) · [日本語・詳細](HANDOFF-2026-11-23.ja.md). The [targeted SSH reply fix](HOST-SSH.md) is installed on the real host: host-to-guest TCP/22 connects, while reverse and inter-guest TCP/22 probes time out. Earlier steps below are a reproducible guide; consult the handoff for persistence and other current status.
 
 A reproducible path from a dedicated **FreeBSD 15.1 / Perl 5.42** virtual machine to local CPAN test reports and, optionally, public CPAN Testers submissions. Based on a working Proxmox-hosted reference environment. **Proxmox is optional.**
 
