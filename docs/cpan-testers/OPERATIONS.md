@@ -156,3 +156,9 @@ Following the successful `DBI-1.656` Metabase send via the existing `send-batch.
 Thus the submitted DBI report left `incoming`, did not remain in `inflight`, and was filed under `sent`. The sender returned exit code 0 and printed `SENT`. This verifies **one complete transfer-and-send workflow**, not unattended scheduling or public CPAN Testers visibility.
 
 **Historical proposed next step (superseded):** automate only the *staging/transfer* phase with 1,024-byte guest-exec stdin chunks. Subsequent QGA hangs made unattended use unreliable; the current plan is to [fix the host-only SSH reply path](HOST-SSH.md), validate isolation, then implement staging with SHA-256 and report-level deduplication. Enable unattended submission only after failure handling is tested. Preserve existing `sent` reports and the `hold` subtree.
+
+## Host SSH reply path verified (2026-11-23)
+
+The user installed the [two-rule input delta](nftables/host-ssh-replies.nft) after a backup and syntax check. The real host then connected to TCP/22 on both guests. Four guest probes completed with `nc` exit 1 / `Operation timed out`: each guest to its own host gateway and each guest to the other guest. Original input drops remained below the new rules. These observations cover the six TCP/22 directions; they do not establish SSH authentication or a complete protocol audit.
+
+The runtime delta is already present. Pre-change backups were reported at `/root/cpan-host-ssh.nTH490/` on Proxmox. Persistent-file installation and real-host reboot recovery remain pending; see the [current handoff](HANDOFF-2026-11-23.md). Do not reapply the runtime delta or restart the smoker to continue persistence work.
