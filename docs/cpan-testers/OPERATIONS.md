@@ -1,6 +1,6 @@
 # FreeBSD smoker operations / troubleshooting
 
-**2026-11-22 最新の引き継ぎ / operational snapshot:** [日本語](HANDOFF-2026-11-22.ja.md) · [English](HANDOFF-2026-11-22.md). This file retains chronological findings; earlier statements marked *unverified* were superseded by later tests. Guest Agent bulk transfers are currently unreliable.
+**2026-11-23 最新の引き継ぎ / operational snapshot:** [日本語](HANDOFF-2026-11-23.ja.md) · [English](HANDOFF-2026-11-23.md). Custom nftables input drops explain the host SSH timeout; see the [targeted SSH fix](HOST-SSH.md). This file retains chronological findings; earlier statements marked *unverified* were superseded by later tests. Guest Agent bulk transfers remain unreliable.
 
 [Start (English)](README.md) | [日本語](README.ja.md)
 
@@ -155,4 +155,4 @@ Following the successful `DBI-1.656` Metabase send via the existing `send-batch.
 
 Thus the submitted DBI report left `incoming`, did not remain in `inflight`, and was filed under `sent`. The sender returned exit code 0 and printed `SENT`. This verifies **one complete transfer-and-send workflow**, not unattended scheduling or public CPAN Testers visibility.
 
-**Operational next step:** automate only the *staging/transfer* phase first with bounded 1,024-byte guest-exec stdin chunks, SHA-256 validation, and report-level deduplication; enable unattended submission only after failure handling is tested. Preserve existing `sent` reports and the `hold` subtree.
+**Historical proposed next step (superseded):** automate only the *staging/transfer* phase with 1,024-byte guest-exec stdin chunks. Subsequent QGA hangs made unattended use unreliable; the current plan is to [fix the host-only SSH reply path](HOST-SSH.md), validate isolation, then implement staging with SHA-256 and report-level deduplication. Enable unattended submission only after failure handling is tested. Preserve existing `sent` reports and the `hold` subtree.
